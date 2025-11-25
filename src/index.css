@@ -1,0 +1,40 @@
+/* Import the Fonts: Outfit (Headlines) and Space Mono (Data) */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;900&family=Space+Mono:wght@400;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  background-color: #050505;
+  color: white;
+  overflow: hidden; /* No scrolling. The app is a window. */
+}
+
+/* --- THE LIQUID GLASS CLASS --- */
+/* This creates that high-end Apple/Sci-Fi panel look */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 
+    0 4px 30px rgba(0, 0, 0, 0.5),
+    inset 0 0 20px rgba(255, 255, 255, 0.01);
+}
+
+/* Green Glow on Hover */
+.liquid-glass:hover {
+  border-color: rgba(57, 255, 20, 0.3);
+  box-shadow: 0 0 30px rgba(57, 255, 20, 0.1);
+  transition: all 0.3s ease;
+}
+
+/* --- UTILITIES --- */
+.text-glow {
+  text-shadow: 0 0 20px rgba(57, 255, 20, 0.5);
+}
+
+canvas {
+  touch-action: none; /* Prevents scrolling on mobile while touching 3D objects */
+}
