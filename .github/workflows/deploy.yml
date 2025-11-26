@@ -3,6 +3,42 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
+      - main  # Trigger deployment on every push to the main branch
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    
+    # *** CRUCIAL FIX: GRANT WRITE PERMISSIONS TO THE ACTION TOKEN ***
+    permissions:
+      contents: write 
+    # ***************************************************************
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js 🧱
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies 📦
+        run: npm install
+        
+      - name: Build project 🏗️
+        run: npm run build
+
+      - name: Deploy to GitHub Pages 🚀
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist 
+          publish_branch: gh-pagesname: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
       - main
 
 jobs:

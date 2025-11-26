@@ -1,7 +1,7 @@
 import { useState, Suspense } from 'react'
 import { Canvas, useThree } from '@react-three/fiber'
 import ParticleBrain from './components/canvas/ParticleBrain'
-import Dashboard from './components/ui/Dashboard'
+const Dashboard = lazy(() => import('./components/ui/Dashboard'))
 import Logo from './components/ui/Logo'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as THREE from 'three'
@@ -35,8 +35,9 @@ function App() {
   }
 
   return (
+    // FINAL, DEFINITIVE FIX: Ensures the main app wrapper is a high-priority composite layer
     <div 
-      className="relative w-full h-screen bg-void-black text-white overflow-hidden cursor-pointer flex flex-col items-center justify-center" 
+      className="relative w-full h-screen bg-void-black text-white overflow-hidden cursor-pointer flex flex-col items-center justify-center transform-gpu" 
       onClick={handleBackgroundClick} 
     >
       
@@ -135,6 +136,7 @@ function App() {
 
       <AnimatePresence>
         {entered && (
+            // Ensure the dashboard itself is rendered high on the Z-axis
             <div onClick={(e) => e.stopPropagation()} className="absolute inset-0 z-50">
                 <Dashboard shape={shape} onBack={() => setEntered(false)} />
             </div>
