@@ -3,6 +3,7 @@ import { Canvas, useThree } from '@react-three/fiber'
 import ParticleBrain from './components/canvas/ParticleBrain'
 const Dashboard = lazy(() => import('./components/ui/Dashboard'))
 import Logo from './components/ui/Logo'
+import { useState, Suspense, lazy } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as THREE from 'three'
 
