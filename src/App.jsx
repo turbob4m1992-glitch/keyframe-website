@@ -1,25 +1,25 @@
-import { useState, Suspense, lazy } from 'react' // All necessary React hooks/functions
-import { Canvas, useThree, useFrame } from '@react-three/fiber' // All R3F hooks
-import { AnimatePresence, motion } from 'framer-motion' // Framer Motion for UI animation
-import * as THREE from 'three' // Three.js utilities
+import { useState, Suspense, lazy } from 'react' 
+import { Canvas, useThree, useFrame } from '@react-three/fiber' 
+import ParticleBrain from './components/canvas/ParticleBrain'
+import Logo from './components/ui/Logo'
+import { AnimatePresence, motion } from 'framer-motion'
+import * as THREE from 'three'
 
-import ParticleBrain from './components/canvas/ParticleBrain' // 3D background
-import Logo from './components/ui/Logo' // Logo component
-
-// Dynamic import for the Dashboard component (for performance/code splitting)
+// Dynamically import Dashboard to optimize initial load (Code Splitting)
 const Dashboard = lazy(() => import('./components/ui/Dashboard'))
 
 function CameraRig({ entered, shape }) {
   const { camera } = useThree()
-  useThree(({ clock }) => {
+  
+  useFrame(({ clock }, delta) => {
     const targetZ = entered ? 2.5 : 5.5 
-    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 0.04)
+    camera.position.z = THREE.MathUtils.lerp(camera.position.z, targetZ, 4 * delta) 
     
     if (!entered) {
       if (shape === 'cloud') {
         const t = clock.getElapsedTime()
-        camera.position.x = Math.sin(t * 0.1) * 0.5 
-        camera.position.y = Math.cos(t * 0.1) * 0.2
+        camera.position.x = Math.sin(t * 0.08) * 0.7 
+        camera.position.y = Math.cos(t * 0.08) * 0.3
       } else {
         camera.position.x = THREE.MathUtils.lerp(camera.position.x, 0, 0.05)
         camera.position.y = THREE.MathUtils.lerp(camera.position.y, 0, 0.05)
@@ -38,11 +38,38 @@ function App() {
   }
 
   return (
-    // FINAL, DEFINITIVE FIX: Ensures the main app wrapper is a high-priority composite layer
     <div 
       className="relative w-full h-screen bg-void-black text-white overflow-hidden cursor-pointer flex flex-col items-center justify-center transform-gpu" 
       onClick={handleBackgroundClick} 
     >
+      
+      {/* **** NEW: PERSISTENT HEADER/NAV BAR (Z-20) **** */}
+      <div className="absolute top-0 left-0 right-0 z-20 flex justify-between items-center p-6 md:p-8 pointer-events-none">
+        
+
+        {/* Contact/Portfolio Links */}
+        <div className="flex gap-6 pointer-events-auto">
+          {/* Portfolio Link (Crucial for finding new clients) */}
+          <a href="#portfolio" className="text-gray-400 font-mono text-xs uppercase hover:text-neon transition-colors duration-300">
+            [ PORTFOLIO ]
+          </a>
+          
+          {/* Contact Trigger (Opens the dashboard) */}
+          <button 
+            onClick={() => { setShape('cloud'); setEntered(true); }}
+            className="text-neon font-mono text-xs uppercase hover:text-white transition-colors duration-300"
+          >
+            <button 
+  onClick={() => { setShape('cloud'); setEntered(true); }}
+  className="text-neon font-mono text-xs uppercase hover:text-white transition-colors duration-300"
+>
+  [ CONTACT ]
+</button>
+          </button>
+        </div>
+
+      </div>
+      {/* **** END NEW HEADER/NAV BAR **** */}
       
       <div className="absolute inset-0 z-0">
         <Canvas camera={{ position: [0, 0, 5.5], fov: 45 }}>
@@ -64,7 +91,10 @@ function App() {
             className="relative z-10 flex flex-col items-center gap-12 w-full max-w-4xl pointer-events-none"
           >
             
-            {/* LOGO */}
+            {/* LOGO (Central Logo is now larger, redundant with the new header) 
+               * Note: We'll keep this central logo for the initial view's aesthetic, 
+               * but the link is now in the header.
+            */}
             <div className="flex justify-center w-full pointer-events-auto">
               <Logo className="w-80 md:w-96 text-white drop-shadow-[0_0_30px_rgba(57,255,20,0.3)]" />
             </div>
@@ -139,9 +169,15 @@ function App() {
 
       <AnimatePresence>
         {entered && (
-            // Ensure the dashboard itself is rendered high on the Z-axis
-            <div onClick={(e) => e.stopPropagation()} className="absolute inset-0 z-50">
-                <Dashboard shape={shape} onBack={() => setEntered(false)} />
+            <div 
+                // NEW: Clicking this outer area now closes the modal
+                onClick={() => setEntered(false)} 
+                className="absolute inset-0 z-50"
+            >
+                <Suspense fallback={null}> 
+                    {/* Dashboard handles its own closing via the 'X' button if needed */}
+                    <Dashboard shape={shape} onBack={() => setEntered(false)} />
+                </Suspense>
             </div>
         )}
       </AnimatePresence>
