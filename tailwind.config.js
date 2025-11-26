@@ -7,8 +7,8 @@ export default {
   theme: {
     extend: {
       colors: {
-        'neon': '#39FF14',       // Keyframe Green
-        'void': '#050505',       // Deepest Black
+        'void-black': '#0D0D0D', // The Brand Black
+      'neon': '#CCFF00',       // The Brand Green
         'glass': 'rgba(255, 255, 255, 0.05)', 
       },
       fontFamily: {
