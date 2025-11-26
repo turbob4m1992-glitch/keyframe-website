@@ -1,4 +1,6 @@
 import { useState, Suspense, lazy } from 'react' 
+const Portfolio = lazy(() => import('./components/ui/Portfolio'))
+const Clients = lazy(() => import('./components/ui/Clients'))
 import { Canvas, useThree, useFrame } from '@react-three/fiber' 
 import ParticleBrain from './components/canvas/ParticleBrain'
 import Logo from './components/ui/Logo'
@@ -32,6 +34,8 @@ function CameraRig({ entered, shape }) {
 function App() {
   const [shape, setShape] = useState('cloud') 
   const [entered, setEntered] = useState(false)
+  const [viewClients, setViewClients] = useState(false) // <--- NEW STATE
+  const [viewPortfolio, setViewPortfolio] = useState(false) // <--- NEW STATE
 
   const handleBackgroundClick = () => {
     if (!entered) setShape('cloud');
@@ -50,9 +54,12 @@ function App() {
         {/* Contact/Portfolio Links */}
         <div className="flex gap-6 pointer-events-auto">
           {/* Portfolio Link (Crucial for finding new clients) */}
-          <a href="#portfolio" className="text-gray-400 font-mono text-xs uppercase hover:text-neon transition-colors duration-300">
+          <button 
+            onClick={() => { setShape('cloud'); setViewPortfolio(true); }}
+            className="text-gray-400 font-mono text-xs uppercase hover:text-neon transition-colors duration-300"
+          >
             [ PORTFOLIO ]
-          </a>
+          </button>
           
           {/* Contact Trigger (Opens the dashboard) */}
           <button 
@@ -167,21 +174,40 @@ function App() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {entered && (
-            <div 
-                // NEW: Clicking this outer area now closes the modal
-                onClick={() => setEntered(false)} 
-                className="absolute inset-0 z-50"
-            >
+            <div onClick={() => setEntered(false)} className="absolute inset-0 z-50">
                 <Suspense fallback={null}> 
-                    {/* Dashboard handles its own closing via the 'X' button if needed */}
                     <Dashboard shape={shape} onBack={() => setEntered(false)} />
                 </Suspense>
             </div>
         )}
+        {viewPortfolio && (
+            <div onClick={() => setViewPortfolio(false)} className="absolute inset-0 z-50">
+                <Suspense fallback={null}> 
+                    <Portfolio onBack={() => setViewPortfolio(false)} />
+                </Suspense>
+            </div>
+        )}
+        {/* NEW CLIENTS MODAL */}
+        {viewClients && (
+            <div onClick={() => setViewClients(false)} className="absolute inset-0 z-50">
+                <Suspense fallback={null}> 
+                    <Clients onBack={() => setViewClients(false)} />
+                </Suspense>
+            </div>
+        )}
       </AnimatePresence>
-
+      
+      {/* **** FOOTER / TRUST TRIGGER (Z-20) **** */}
+      <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center pointer-events-none">
+        <button 
+           onClick={() => { setShape('cloud'); setViewClients(true); }}
+           className="pointer-events-auto text-gray-500 font-mono text-[10px] uppercase tracking-[0.2em] hover:text-neon transition-all duration-300 animate-pulse hover:animate-none"
+        >
+          [ TRUST PROTOCOL ]
+        </button>
+      </div>
     </div>
   )
 }
