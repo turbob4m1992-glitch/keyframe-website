@@ -1,11 +1,13 @@
-import { useState, Suspense } from 'react'
-import { Canvas, useThree } from '@react-three/fiber'
-import ParticleBrain from './components/canvas/ParticleBrain'
+import { useState, Suspense, lazy } from 'react' // All necessary React hooks/functions
+import { Canvas, useThree, useFrame } from '@react-three/fiber' // All R3F hooks
+import { AnimatePresence, motion } from 'framer-motion' // Framer Motion for UI animation
+import * as THREE from 'three' // Three.js utilities
+
+import ParticleBrain from './components/canvas/ParticleBrain' // 3D background
+import Logo from './components/ui/Logo' // Logo component
+
+// Dynamic import for the Dashboard component (for performance/code splitting)
 const Dashboard = lazy(() => import('./components/ui/Dashboard'))
-import Logo from './components/ui/Logo'
-import { useState, Suspense, lazy } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import * as THREE from 'three'
 
 function CameraRig({ entered, shape }) {
   const { camera } = useThree()
