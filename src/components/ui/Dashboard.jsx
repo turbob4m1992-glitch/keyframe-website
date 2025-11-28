@@ -2,11 +2,11 @@ import { motion } from 'framer-motion';
 
 const DATA = {
   cloud: {
-    title: "CONTACT", // Changed title from KEYFRAME to CONTACT
-    subtitle: "INITIATE DIRECT CONNECTION", // New Subtitle
-    cards: [ // Using the card structure to cleanly present contact info
+    title: "CONTACT",
+    subtitle: "INITIATE DIRECT CONNECTION",
+    cards: [
       { title: "EMAIL", desc: "PROJECTS & INQUIRIES: YOUR_EMAIL@EXAMPLE.COM", col: "col-span-3" },
-      { title: "SCHEDULER", desc: "BOOK A FREE CONSULTATION (Calendly, etc.)", col: "col-span-2" },
+      { title: "SCHEDULER", desc: "BOOK A FREE CONSULTATION", col: "col-span-2" },
       { title: "LINKEDIN", desc: "CONNECT PROFESSIONALLY", col: "col-span-1" }
     ]
   },
@@ -14,45 +14,44 @@ const DATA = {
     title: "STUDIO",
     subtitle: "PRODUCTION & VFX",
     cards: [
-      { title: "The Reel", desc: "**Cine-Grade 4K** Showreel: See the Magic.", detail: "We use a dedicated post-production pipeline to deliver immersive, cinema-quality visuals, ensuring every frame maximizes impact for distribution.", col: "col-span-1 md:col-span-2" },
-      { title: "Gear List", desc: "Arri Alexa, **RED Komodo** & Pro Optics", detail: "Our high-end camera packages and lighting kits guarantee technical excellence for any commercial project.", col: "col-span-1" },
-      { title: "Sound Design", desc: "**Immersive Dolby Atmos** Mixing & Mastering", detail: "Professional audio is non-negotiable. We craft full soundscapes that drive emotional resonance and meet broadcast standards.", col: "col-span-1" },
-      { title: "Color Grading", desc: "**HDR Cinema Finish** using DaVinci Resolve", detail: "We apply a final polish using industry-standard HDR techniques, giving your visuals a premium, distinct cinematic look.", col: "col-span-1 md:col-span-2" },
+      { title: "The Reel", desc: "Cine-Grade 4K Showreel", detail: "Immersive, cinema-quality visuals.", col: "col-span-1 md:col-span-2" },
+      { title: "Gear List", desc: "Arri Alexa, RED Komodo", detail: "High-end camera packages.", col: "col-span-1" },
+      { title: "Sound Design", desc: "Dolby Atmos Mixing", detail: "Full soundscapes that drive emotion.", col: "col-span-1" },
+      { title: "Color Grading", desc: "HDR Cinema Finish", detail: "Premium, distinct cinematic looks.", col: "col-span-1 md:col-span-2" },
     ]
   },
   pyramid: { // STRATEGY
     title: "STRATEGY",
     subtitle: "GROWTH ARCHITECTURE",
     cards: [
-      { title: "The Blueprint", desc: "**Precision Market Positioning** & Audit", detail: "We define your precise brand coordinates to ensure maximum market penetration and competitive advantage.", col: "col-span-1 md:col-span-2" },
-      { title: "Competitor Intel", desc: "Decoding the Market: **Deep-Dive Analysis**", detail: "We analyze competitor campaigns, visual language, and content strategy to find clear pathways for market dominance.", col: "col-span-1" },
-      { title: "Growth Sprints", desc: "**Agile KPI Targeting** and Weekly Velocity", detail: "We use weekly targets and measurable key performance indicators (KPIs) to guarantee momentum and ROI.", col: "col-span-1" },
-      { title: "Full Funnel", desc: "**Zero-Compromise** Acquisition to Retention", detail: "We build video and web assets designed to capture leads, convert sales, and build lasting customer loyalty.", col: "col-span-1 md:col-span-2" },
+      { title: "The Blueprint", desc: "Precision Market Positioning", detail: "Maximum market penetration.", col: "col-span-1 md:col-span-2" },
+      { title: "Competitor Intel", desc: "Deep-Dive Analysis", detail: "Decoding the market.", col: "col-span-1" },
+      { title: "Growth Sprints", desc: "Agile KPI Targeting", detail: "Weekly velocity.", col: "col-span-1" },
+      { title: "Full Funnel", desc: "Acquisition to Retention", detail: "Assets that capture leads.", col: "col-span-1 md:col-span-2" },
     ]
   },
   icosahedron: { // DESIGN
     title: "DESIGN",
     subtitle: "VISUAL EVOLUTION",
     cards: [
-      { title: "Identity System", desc: "**Magnetic** Logo, Type & Color Theory", detail: "We craft visual identities that are unique, scalable, and built to stand out in crowded digital spaces.", col: "col-span-1 md:col-span-2" },
-      { title: "UI/UX", desc: "Pixel-Perfect **Figma Prototypes** & Flows", detail: "Web and app design focused on intuitive flow and user conversion, delivered with precise documentation.", col: "col-span-1" },
-      { title: "Motion Assets", desc: "Lottie & Rive **Dynamic Animations**", detail: "We integrate lightweight, performant motion graphics to enhance engagement and explain complex concepts quickly.", col: "col-span-1" },
-      { title: "Brand Guidelines", desc: "The **Definitive Visual Bible**", detail: "A comprehensive document ensuring every touchpoint, from social media to print, is visually consistent and powerful.", col: "col-span-1 md:col-span-2" },
+      { title: "Identity System", desc: "Magnetic Logo & Type", detail: "Unique, scalable visual identities.", col: "col-span-1 md:col-span-2" },
+      { title: "UI/UX", desc: "Figma Prototypes", detail: "Intuitive flow and user conversion.", col: "col-span-1" },
+      { title: "Motion Assets", desc: "Lottie & Rive", detail: "Lightweight, performant motion.", col: "col-span-1" },
+      { title: "Brand Guidelines", desc: "Definitive Visual Bible", detail: "Consistent touchpoints.", col: "col-span-1 md:col-span-2" },
     ]
   },
   sphere: { // GLOBAL
     title: "GLOBAL",
     subtitle: "WORLDWIDE NETWORK",
     cards: [
-      { title: "Remote Teams", desc: "Seamless **24/7 Production Cycle**", col: "col-span-2", detail: "Our workflow allows us to utilize global talent, minimizing project downtime and maximizing delivery speed." },
-      { title: "Localization", desc: "Multi-language & **Cultural Asset Adaptation**", col: "col-span-1", detail: "We adapt visuals and messaging for specific regional markets, ensuring cultural relevance and maximizing global reach." },
-      { title: "Cloud Sync", desc: "Instant **Zero-Latency** Asset Delivery", col: "col-span-1", detail: "All assets are available instantly via cloud sync, speeding up client review and approval cycles." },
-      { title: "Partners", desc: "**Elite Global Studio Network** Access", col: "col-span-2", detail: "Access to a vetted network of international collaborators for specialized tasks and large-scale projects." },
+      { title: "Remote Teams", desc: "24/7 Production Cycle", col: "col-span-2", detail: "Utilize global talent for speed." },
+      { title: "Localization", desc: "Cultural Adaptation", col: "col-span-1", detail: "Regional market relevance." },
+      { title: "Cloud Sync", desc: "Zero-Latency Delivery", col: "col-span-1", detail: "Instant asset delivery." },
+      { title: "Partners", desc: "Elite Network Access", col: "col-span-2", detail: "Vetted international collaborators." },
     ]
   }
 };
 
-// Use Framer Motion on the Cards for better hover interaction
 const Card = motion.div;
 
 export default function Dashboard({ shape, onBack }) {
@@ -61,16 +60,15 @@ export default function Dashboard({ shape, onBack }) {
   return (
     <div className="absolute inset-0 z-50 flex items-center justify-center p-4 pointer-events-auto">
       
-      
-
-<motion.div 
-  onClick={(e) => e.stopPropagation()} // <--- ADDED: Stops clicks from closing the modal
-  initial={{ opacity: 0, scale: 0.9, y: 20 }}
-  animate={{ opacity: 1, scale: 1, y: 0 }}
-  exit={{ opacity: 0, scale: 0.9, y: 20 }}
-  transition={{ duration: 0.5 }}
-  className="relative w-full max-w-3xl liquid-glass rounded-3xl p-8 md:p-12 shadow-2xl bg-black/80" 
->
+      <motion.div 
+        onClick={(e) => e.stopPropagation()} 
+        initial={{ opacity: 0, scale: 0.9, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.9, y: 20 }}
+        transition={{ duration: 0.5 }}
+        // FIXED: Used bg-black/40 to ensure translucency (Liquid Glass)
+        className="relative w-full max-w-3xl bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl" 
+      >
         
         <button 
           onClick={onBack}
@@ -92,12 +90,9 @@ export default function Dashboard({ shape, onBack }) {
           {content.cards && content.cards.map((card, i) => (
             <Card
               key={i}
-              // REVERTED: Using simple opacity change for stable hover feedback
-              whileHover={{ 
-                opacity: 0.95, // Slight transparency change
-              }} 
+              whileHover={{ opacity: 0.8 }} 
               whileTap={{ scale: 0.98 }}
-              className={`${card.col} relative bg-white/5 border border-white/5 p-4 rounded-xl hover:border-neon/30 transition-colors group cursor-pointer`}
+              className={`${card.col} relative bg-white/5 backdrop-blur-md border border-white/5 p-4 rounded-xl hover:border-neon/30 transition-colors group cursor-pointer`}
             >
               <h3 className="text-lg font-bold text-white mb-1 group-hover:text-neon transition-colors">{card.title}</h3>
               <p className="text-gray-400 font-mono text-[10px] leading-relaxed">{card.desc}</p>

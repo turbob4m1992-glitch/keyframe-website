@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 
-// MOCK DATA - Replace with real client info later
+// MOCK DATA
 const CLIENTS = [
   { name: "TechNova", industry: "SaaS" },
   { name: "Velocorp", industry: "Automotive" },
@@ -26,7 +26,8 @@ export default function Clients({ onBack }) {
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 50 }}
         transition={{ duration: 0.5 }}
-        className="relative w-full max-w-4xl max-h-[85vh] liquid-glass rounded-3xl p-8 md:p-12 shadow-2xl bg-black/90 flex flex-col border-t border-neon/20" 
+        // UPDATED: Liquid Glass Style (Darker glass as requested)
+        className="relative w-full max-w-4xl max-h-[85vh] bg-black/60 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl flex flex-col" 
       >
         
         {/* HEADER */}
@@ -51,12 +52,13 @@ export default function Clients({ onBack }) {
         {/* CONTENT SCROLL AREA */}
         <div className="overflow-y-auto pr-2 custom-scrollbar space-y-12">
           
-          {/* SECTION 1: CLIENT LOGOS (Using text placeholders for now) */}
+          {/* SECTION 1: CLIENT LOGOS */}
           <section>
             <h3 className="text-white/50 font-mono text-xs mb-6 uppercase tracking-widest">Deployments</h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {CLIENTS.map((client, i) => (
-                <div key={i} className="h-24 bg-white/5 rounded-lg flex items-center justify-center border border-white/5 hover:border-neon/30 hover:bg-white/10 transition-all cursor-default group">
+                // UPDATED: Inner cards glass effect
+                <div key={i} className="h-24 bg-white/5 backdrop-blur-md rounded-lg flex items-center justify-center border border-white/5 hover:border-neon/30 hover:bg-white/10 transition-all cursor-default group">
                   <span className="text-gray-400 font-bold group-hover:text-white transition-colors">{client.name}</span>
                 </div>
               ))}
@@ -68,7 +70,8 @@ export default function Clients({ onBack }) {
             <h3 className="text-white/50 font-mono text-xs mb-6 uppercase tracking-widest">Incoming Transmissions</h3>
             <div className="grid grid-cols-1 gap-6">
               {REVIEWS.map((review, i) => (
-                <div key={i} className="bg-gradient-to-r from-white/5 to-transparent p-6 border-l-2 border-neon/50">
+                // UPDATED: Inner review cards glass effect
+                <div key={i} className="bg-white/5 backdrop-blur-md p-6 border-l-2 border-neon/50 rounded-r-lg">
                   <p className="text-gray-300 italic mb-4">"{review.text}"</p>
                   <div className="flex flex-col">
                     <span className="text-white font-bold text-sm">{review.author}</span>
