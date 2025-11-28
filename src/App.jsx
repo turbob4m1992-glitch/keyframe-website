@@ -1,9 +1,12 @@
-import { useState, Suspense, lazy, useRef } from 'react' 
-const Portfolio = lazy(() => import('./components/ui/Portfolio'))
+import { useState, Suspense, lazy, useRef, useEffect } from 'react' 
+const Portfolio = lazy(() => import('./components/ui/Portfolio')) 
 const Clients = lazy(() => import('./components/ui/Clients'))
+// NEW: Import the Mobile Portfolio View
+const MobilePortfolio = lazy(() => import('./components/ui/MobilePortfolio'))
+
 import { Canvas, useThree, useFrame } from '@react-three/fiber' 
 import ParticleBrain from './components/canvas/ParticleBrain'
-import PortfolioSpace from './components/canvas/PortfolioSpace'
+import PortfolioSpace from './components/canvas/PortfolioSpace' 
 import Logo from './components/ui/Logo'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as THREE from 'three'
@@ -18,22 +21,24 @@ function CameraRig({ entered, shape, viewPortfolio }) {
   const isMobile = size.width < 768
 
   useFrame(({ clock }, delta) => {
+    // 1. ZOOM LOGIC
     let targetRadius = 6.0 
     
     if (entered) {
         targetRadius = 4.5 
     } else if (viewPortfolio) {
-        targetRadius = 8.5 
+        targetRadius = 9.0 
     }
 
     if (isMobile) {
         if (entered) targetRadius = 7.0 
-        else if (viewPortfolio) targetRadius = 11.0 
+        else if (viewPortfolio) targetRadius = 13.0 
         else targetRadius = 10.5 
     }
 
     radiusRef.current = THREE.MathUtils.lerp(radiusRef.current, targetRadius, 4 * delta)
 
+    // 2. ORBIT LOGIC
     let targetAngle = 0
     if (viewPortfolio) {
       targetAngle = Math.PI / 2 
@@ -57,6 +62,16 @@ function App() {
   const [entered, setEntered] = useState(false)
   const [viewClients, setViewClients] = useState(false) 
   const [viewPortfolio, setViewPortfolio] = useState(false)
+  
+  // NEW: Detect Mobile Screen Size
+  const [isMobile, setIsMobile] = useState(false)
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768)
+    checkMobile()
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  }, [])
 
   const handleBackgroundClick = () => {
     if (!entered && !viewPortfolio) setShape('cloud');
@@ -74,17 +89,23 @@ function App() {
           <button 
             onClick={() => { 
                 setShape('cloud'); 
-                setViewPortfolio(!viewPortfolio); 
+                setViewPortfolio(true); 
                 setEntered(false); 
             }}
-            className={`font-mono text-xs uppercase hover:text-neon transition-colors duration-300 ${viewPortfolio ? 'text-neon' : 'text-gray-400'}`}
+            disabled={viewPortfolio}
+            className={`font-mono text-xs uppercase transition-colors duration-300 ${viewPortfolio ? 'text-neon cursor-default' : 'text-gray-400 hover:text-neon cursor-pointer'}`}
           >
-            {viewPortfolio ? '[ CLOSE VAULT ]' : '[ PORTFOLIO ]'}
+            [ PORTFOLIO ]
           </button>
           
           <button 
-            onClick={() => { setShape('cloud'); setEntered(true); setViewPortfolio(false); }}
-            className="text-neon font-mono text-xs uppercase hover:text-white transition-colors duration-300"
+            onClick={() => { 
+                setShape('cloud'); 
+                setEntered(true); 
+                setViewPortfolio(false); 
+            }}
+            disabled={entered}
+            className={`font-mono text-xs uppercase transition-colors duration-300 ${entered ? 'text-neon cursor-default' : 'text-gray-400 hover:text-white cursor-pointer'}`}
           >
             [ CONTACT ]
           </button>
@@ -96,10 +117,12 @@ function App() {
         <Canvas camera={{ position: [0, 0, 6.0], fov: 45 }}> 
           <Suspense fallback={null}>
             <ParticleBrain shape={shape} />
-            <PortfolioSpace 
-  isOpen={viewPortfolio} 
-  onClose={() => setViewPortfolio(false)} 
-/>
+            
+            {/* CONDITIONAL RENDERING: Only show 3D Hologram on Desktop */}
+            {!isMobile && (
+               <PortfolioSpace isOpen={viewPortfolio} onClose={() => setViewPortfolio(false)} /> 
+            )}
+
             <CameraRig entered={entered} shape={shape} viewPortfolio={viewPortfolio} />
             <ambientLight intensity={0.5} />
           </Suspense>
@@ -136,8 +159,7 @@ function App() {
                       setEntered(true);
                     }}
                     disabled={shape === 'cloud'} 
-                    // FIXED: Restored Hide/Slide logic
-                    className={`pointer-events-auto group relative px-8 py-3 overflow-hidden rounded-lg bg-transparent transition-all duration-300 ${shape === 'cloud' ? 'opacity-0 translate-y-4 cursor-default' : 'hover:shadow-[0_0_30px_rgba(57,255,20,0.2)] opacity-100 translate-y-0'}`}
+                    className={`pointer-events-auto group relative px-8 py-3 overflow-hidden rounded-lg bg-transparent transition-all duration-300 ${shape === 'cloud' ? 'opacity-0 translate-y-4 pointer-events-none' : 'hover:shadow-[0_0_30px_rgba(57,255,20,0.2)] opacity-100 translate-y-0'}`}
                 >
                     <span className="relative z-10 font-mono text-xs text-neon tracking-[0.3em] group-hover:text-black transition-colors duration-300">INITIALIZE_SYSTEM</span>
                     <div className="absolute inset-0 h-full w-full bg-neon/0 group-hover:bg-neon transition-all duration-300"></div>
@@ -161,6 +183,15 @@ function App() {
             <div onClick={() => setViewClients(false)} className="absolute inset-0 z-50">
                 <Suspense fallback={null}> 
                     <Clients onBack={() => setViewClients(false)} />
+                </Suspense>
+            </div>
+        )}
+
+        {/* NEW: On Mobile, show 2D Portfolio instead of 3D space */}
+        {viewPortfolio && isMobile && (
+            <div onClick={() => setViewPortfolio(false)} className="absolute inset-0 z-50">
+                <Suspense fallback={null}>
+                    <MobilePortfolio onBack={() => setViewPortfolio(false)} />
                 </Suspense>
             </div>
         )}

@@ -49,66 +49,75 @@ export default function PortfolioSpace({ isOpen, onClose }) {
   
   const [selectedProject, setSelectedProject] = useState(null)
 
+  // Reset to main grid when portfolio is closed
+  useEffect(() => {
+    if (!isOpen) {
+      const timer = setTimeout(() => {
+        setSelectedProject(null)
+      }, 500)
+      return () => clearTimeout(timer)
+    }
+  }, [isOpen])
+
   // Handle Click Outside
   useEffect(() => {
     function handleClickOutside(event) {
+      // On mobile, ignore click outside (user must use X button)
+      if (isMobile) return 
+
       if (isOpen && wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         if (onClose) onClose()
-        setTimeout(() => setSelectedProject(null), 300) 
       }
     }
+    
     document.addEventListener("mousedown", handleClickOutside)
-    // Adding touchstart listener for mobile "tap outside" support
     document.addEventListener("touchstart", handleClickOutside)
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("touchstart", handleClickOutside)
     }
-  }, [isOpen, onClose])
+  }, [isOpen, onClose, isMobile])
 
   return (
-    // FIX 1: Position & Rotation Logic
-    // Mobile: Center at [0,0,0] and face forward [0,0,0]
-    // Desktop: Keep original side position [3,0,0] and rotation
     <group 
       position={isMobile ? [0, 0, 0] : [3, 0, 0]} 
-      rotation={isMobile ? [0, 0, 0] : [0, Math.PI / 2, 0]} 
-      scale={isMobile ? 0.65 : 0.9}
+      rotation={[0, Math.PI / 2, 0]} 
+      scale={1} 
     > 
       
       <Html 
         transform 
-        distanceFactor={isMobile ? 4 : 3}
-        // FIX 2: Force UI on top of 3D elements
+        // FIX 1: Huge Mobile Size (1.5 distanceFactor = very close/big)
+        distanceFactor={isMobile ? 1.5 : 3}
         zIndexRange={[100, 0]} 
         style={{ 
-          width: isMobile ? '360px' : '900px', 
-          height: isMobile ? '550px' : '650px',
+          width: isMobile ? '90vw' : '900px', 
+          height: isMobile ? '80vh' : '650px',
           opacity: isOpen ? 1 : 0.08, 
           filter: isOpen ? 'blur(0px)' : 'blur(4px)',
-          // FIX 3: Ensure pointer events are active and touch works
-          pointerEvents: isOpen ? 'auto' : 'none',
-          touchAction: 'pan-y', // Critical for scrolling on mobile
-          transition: 'all 0.8s ease-in-out',
+          // FIX 2: 'auto' when open BLOCKS clicks to background buttons (disabling them)
+          pointerEvents: isOpen ? 'auto' : 'none', 
           display: 'flex',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
+          transition: 'all 0.8s ease-in-out',
         }}
       >
         
         {/* LIQUID GLASS UI */}
         <div 
             ref={wrapperRef}
-            // FIX 4: Stop propagation on touch start to prevent camera from spinning when touching the card
+            // FIX 3: Stop propagation everywhere to ensure scrolling works and camera doesn't spin
             onPointerDown={(e) => e.stopPropagation()}
+            onPointerMove={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
-            className="w-full h-full bg-[#0d0d0d]/70 backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col ring-1 ring-white/5 relative"
+            onTouchMove={(e) => e.stopPropagation()}
+            className="w-full h-full bg-[#0d0d0d]/80 backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col ring-1 ring-white/5 relative"
         >
             
-            {/* CLOSE BUTTON */}
+            {/* CLOSE BUTTON (Internal) */}
             <button 
                 onClick={(e) => { e.stopPropagation(); onClose(); }}
-                // Increased touch target size (p-4) for mobile fingers
                 className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors font-mono text-xl z-[60] p-4 bg-black/20 rounded-full backdrop-blur-md cursor-pointer"
             >
                 X
@@ -122,28 +131,33 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="flex flex-col h-full p-6 md:p-12"
+                        className="flex flex-col h-full p-4 md:p-12"
                     >
                         {/* HEADER */}
-                        <div className="flex justify-between items-start mb-6 border-b border-white/10 pb-4 flex-shrink-0">
+                        <div className="flex justify-between items-start mb-4 border-b border-white/10 pb-4 flex-shrink-0">
                             <div>
                                 <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-2">
                                 PORTFOLIO
                                 </h2>
                                 <p className="text-neon font-mono text-[10px] md:text-xs tracking-[0.3em]">
-                                /// SELECTED WORKS 2023-2025
+                                /// SELECTED WORKS
                                 </p>
                             </div>
                         </div>
 
                         {/* SCROLLABLE GRID */}
-                        {/* FIX 5: touch-auto allows scrolling inside this div */}
-                        <div className="overflow-y-auto pr-2 custom-scrollbar flex-grow touch-auto">
+                        <div 
+                            className="overflow-y-auto pr-2 custom-scrollbar flex-grow"
+                            // FIX 4: pan-y enables vertical scrolling
+                            style={{ 
+                                touchAction: 'pan-y', 
+                                WebkitOverflowScrolling: 'touch' 
+                            }}
+                        >
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 pb-4">
                                 {PROJECTS.map((project, i) => (
                                     <div 
                                         key={i} 
-                                        // Use onPointerUp for better mobile response than onClick sometimes
                                         onClick={(e) => { e.stopPropagation(); setSelectedProject({ ...project, index: i }); }}
                                         className="relative rounded-xl overflow-hidden border border-white/10 hover:border-neon/50 transition-all duration-300 group cursor-pointer h-48 md:h-64 shadow-lg bg-black"
                                     >
@@ -160,18 +174,13 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                                                 /// {project.type}
                                             </span>
                                         </div>
-                                        <div className="absolute top-4 right-4 z-30">
-                                            <span className="text-white font-mono text-[10px] bg-black/50 border border-white/20 px-2 py-1 rounded backdrop-blur-md">
-                                            REF_0{i+1}
-                                            </span>
-                                        </div>
                                     </div>
                                 ))}
                             </div>
                         </div>
                     </motion.div>
                 ) : (
-                    /* --- DETAIL VIEW (EXPANDED) --- */
+                    /* --- DETAIL VIEW --- */
                     <motion.div 
                         key="detail"
                         initial={{ opacity: 0 }}
@@ -181,7 +190,7 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                         className="flex flex-col h-full w-full bg-[#0d0d0d] absolute inset-0 z-40"
                     >
                         {/* Big Image Area */}
-                        <div className="w-full h-[55%] relative flex-shrink-0">
+                        <div className="w-full h-[40%] md:h-[55%] relative flex-shrink-0">
                             <img 
                                 src={`https://picsum.photos/id/${selectedProject.index + 80}/600/400`} 
                                 alt={selectedProject.title}
@@ -199,30 +208,46 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                         </div>
 
                         {/* Content Area */}
-                        <div className="flex-grow p-8 md:p-12 -mt-10 relative z-10 overflow-y-auto touch-auto">
+                        <div 
+                            className="flex-grow p-6 md:p-12 -mt-6 relative z-10 overflow-y-auto"
+                            style={{ 
+                                touchAction: 'pan-y', 
+                                WebkitOverflowScrolling: 'touch' 
+                            }}
+                        >
                             <div className="flex flex-col md:flex-row justify-between items-start gap-4 border-b border-white/10 pb-6 mb-6">
                                 <div>
-                                    <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-2">
+                                    <h1 className="text-3xl md:text-6xl font-black text-white tracking-tighter mb-2">
                                         {selectedProject.title}
                                     </h1>
                                     <span className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded text-xs font-mono tracking-widest" style={{ color: selectedProject.color }}>
                                         /// {selectedProject.type} PROJECT
                                     </span>
                                 </div>
+                                <div className="text-right hidden md:block">
+                                     <span className="text-white/30 font-mono text-sm block">DATE</span>
+                                     <span className="text-white font-mono text-sm">OCT 2024</span>
+                                </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10">
                                 <div className="md:col-span-2">
                                     <h3 className="text-white/50 text-xs font-mono tracking-widest mb-4">DESCRIPTION</h3>
-                                    <p className="text-gray-300 text-lg leading-relaxed font-light">
+                                    <p className="text-gray-300 text-sm md:text-lg leading-relaxed font-light">
                                         {selectedProject.desc} 
+                                        <br/><br/>
+                                        This project pushed the boundaries of {selectedProject.type.toLowerCase()} production. 
+                                        We utilized advanced rendering techniques combined with real-time motion capture to create a seamless visual experience.
                                     </p>
                                 </div>
+                                
                                 <div className="bg-white/5 rounded-xl p-6 border border-white/5 h-fit">
                                     <h3 className="text-white/50 text-xs font-mono tracking-widest mb-4">DELIVERABLES</h3>
                                     <ul className="text-gray-400 text-sm space-y-2 font-mono">
                                         <li>• 4K Master Render</li>
                                         <li>• Social Media Cuts</li>
+                                        <li>• Source Files</li>
+                                        <li>• Brand Guidelines</li>
                                     </ul>
                                 </div>
                             </div>
