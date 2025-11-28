@@ -58,23 +58,37 @@ export default function PortfolioSpace({ isOpen, onClose }) {
       }
     }
     document.addEventListener("mousedown", handleClickOutside)
+    // Adding touchstart listener for mobile "tap outside" support
+    document.addEventListener("touchstart", handleClickOutside)
     return () => {
       document.removeEventListener("mousedown", handleClickOutside)
+      document.removeEventListener("touchstart", handleClickOutside)
     }
   }, [isOpen, onClose])
 
   return (
-    <group position={[3, 0, 0]} rotation={[0, Math.PI / 2, 0]} scale={isMobile ? 0.7 : 0.9}> 
+    // FIX 1: Position & Rotation Logic
+    // Mobile: Center at [0,0,0] and face forward [0,0,0]
+    // Desktop: Keep original side position [3,0,0] and rotation
+    <group 
+      position={isMobile ? [0, 0, 0] : [3, 0, 0]} 
+      rotation={isMobile ? [0, 0, 0] : [0, Math.PI / 2, 0]} 
+      scale={isMobile ? 0.65 : 0.9}
+    > 
       
       <Html 
         transform 
-        distanceFactor={isMobile ? 4 : 3} 
+        distanceFactor={isMobile ? 4 : 3}
+        // FIX 2: Force UI on top of 3D elements
+        zIndexRange={[100, 0]} 
         style={{ 
           width: isMobile ? '360px' : '900px', 
           height: isMobile ? '550px' : '650px',
           opacity: isOpen ? 1 : 0.08, 
           filter: isOpen ? 'blur(0px)' : 'blur(4px)',
+          // FIX 3: Ensure pointer events are active and touch works
           pointerEvents: isOpen ? 'auto' : 'none',
+          touchAction: 'pan-y', // Critical for scrolling on mobile
           transition: 'all 0.8s ease-in-out',
           display: 'flex',
           justifyContent: 'center',
@@ -85,13 +99,17 @@ export default function PortfolioSpace({ isOpen, onClose }) {
         {/* LIQUID GLASS UI */}
         <div 
             ref={wrapperRef}
+            // FIX 4: Stop propagation on touch start to prevent camera from spinning when touching the card
+            onPointerDown={(e) => e.stopPropagation()}
+            onTouchStart={(e) => e.stopPropagation()}
             className="w-full h-full bg-[#0d0d0d]/70 backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col ring-1 ring-white/5 relative"
         >
             
             {/* CLOSE BUTTON */}
             <button 
-                onClick={onClose}
-                className="absolute top-6 right-6 text-white/30 hover:text-white/100 transition-colors font-mono text-xl z-50 p-2 bg-black/20 rounded-full backdrop-blur-md"
+                onClick={(e) => { e.stopPropagation(); onClose(); }}
+                // Increased touch target size (p-4) for mobile fingers
+                className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors font-mono text-xl z-[60] p-4 bg-black/20 rounded-full backdrop-blur-md cursor-pointer"
             >
                 X
             </button>
@@ -119,15 +137,16 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                         </div>
 
                         {/* SCROLLABLE GRID */}
-                        <div className="overflow-y-auto pr-2 custom-scrollbar flex-grow">
+                        {/* FIX 5: touch-auto allows scrolling inside this div */}
+                        <div className="overflow-y-auto pr-2 custom-scrollbar flex-grow touch-auto">
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 pb-4">
                                 {PROJECTS.map((project, i) => (
                                     <div 
                                         key={i} 
-                                        onClick={() => setSelectedProject({ ...project, index: i })}
+                                        // Use onPointerUp for better mobile response than onClick sometimes
+                                        onClick={(e) => { e.stopPropagation(); setSelectedProject({ ...project, index: i }); }}
                                         className="relative rounded-xl overflow-hidden border border-white/10 hover:border-neon/50 transition-all duration-300 group cursor-pointer h-48 md:h-64 shadow-lg bg-black"
                                     >
-                                        {/* OPTIMIZATION: Using a consistent image size/ID to ensure cache hit */}
                                         <img 
                                             src={`https://picsum.photos/id/${i + 80}/600/400`} 
                                             alt={project.title}
@@ -163,26 +182,24 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                     >
                         {/* Big Image Area */}
                         <div className="w-full h-[55%] relative flex-shrink-0">
-                            {/* OPTIMIZATION: Using EXACT SAME URL as grid to load from cache instantly */}
                             <img 
                                 src={`https://picsum.photos/id/${selectedProject.index + 80}/600/400`} 
                                 alt={selectedProject.title}
                                 className="w-full h-full object-cover opacity-80"
                             />
-                            {/* Gradient to blend image into dark background */}
                             <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent"></div>
                             
                             {/* BACK BUTTON */}
                             <button 
-                                onClick={() => setSelectedProject(null)}
-                                className="absolute top-6 left-6 bg-black/40 hover:bg-neon hover:text-black text-white border border-white/20 px-4 py-2 rounded-full backdrop-blur-md transition-all font-mono text-xs tracking-widest flex items-center gap-2 z-50"
+                                onClick={(e) => { e.stopPropagation(); setSelectedProject(null); }}
+                                className="absolute top-6 left-6 bg-black/40 hover:bg-neon hover:text-black text-white border border-white/20 px-4 py-2 rounded-full backdrop-blur-md transition-all font-mono text-xs tracking-widest flex items-center gap-2 z-50 cursor-pointer"
                             >
                                 ← BACK
                             </button>
                         </div>
 
                         {/* Content Area */}
-                        <div className="flex-grow p-8 md:p-12 -mt-10 relative z-10 overflow-y-auto">
+                        <div className="flex-grow p-8 md:p-12 -mt-10 relative z-10 overflow-y-auto touch-auto">
                             <div className="flex flex-col md:flex-row justify-between items-start gap-4 border-b border-white/10 pb-6 mb-6">
                                 <div>
                                     <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-2">
@@ -192,10 +209,6 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                                         /// {selectedProject.type} PROJECT
                                     </span>
                                 </div>
-                                <div className="text-right hidden md:block">
-                                     <span className="text-white/30 font-mono text-sm block">DATE</span>
-                                     <span className="text-white font-mono text-sm">OCT 2024</span>
-                                </div>
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10">
@@ -203,19 +216,13 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                                     <h3 className="text-white/50 text-xs font-mono tracking-widest mb-4">DESCRIPTION</h3>
                                     <p className="text-gray-300 text-lg leading-relaxed font-light">
                                         {selectedProject.desc} 
-                                        <br/><br/>
-                                        This project pushed the boundaries of {selectedProject.type.toLowerCase()} production. 
-                                        We utilized advanced rendering techniques combined with real-time motion capture.
                                     </p>
                                 </div>
-                                
                                 <div className="bg-white/5 rounded-xl p-6 border border-white/5 h-fit">
                                     <h3 className="text-white/50 text-xs font-mono tracking-widest mb-4">DELIVERABLES</h3>
                                     <ul className="text-gray-400 text-sm space-y-2 font-mono">
                                         <li>• 4K Master Render</li>
                                         <li>• Social Media Cuts</li>
-                                        <li>• Source Files</li>
-                                        <li>• Brand Guidelines</li>
                                     </ul>
                                 </div>
                             </div>
