@@ -3,6 +3,8 @@ const Portfolio = lazy(() => import('./components/ui/Portfolio'))
 const Clients = lazy(() => import('./components/ui/Clients'))
 // NEW: Import the Mobile Portfolio View
 const MobilePortfolio = lazy(() => import('./components/ui/MobilePortfolio'))
+// NEW: Import the Legacy Component
+const Legacy = lazy(() => import('./components/ui/Legacy'))
 
 import { Canvas, useThree, useFrame } from '@react-three/fiber' 
 import ParticleBrain from './components/canvas/ParticleBrain'
@@ -61,6 +63,7 @@ function App() {
   const [shape, setShape] = useState('cloud') 
   const [entered, setEntered] = useState(false)
   const [viewClients, setViewClients] = useState(false) 
+  const [viewLegacy, setViewLegacy] = useState(false) // NEW STATE FOR LEGACY
   const [viewPortfolio, setViewPortfolio] = useState(false)
   
   // NEW: Detect Mobile Screen Size
@@ -187,6 +190,15 @@ function App() {
             </div>
         )}
 
+        {/* NEW: LEGACY VIEW */}
+        {viewLegacy && (
+            <div onClick={() => setViewLegacy(false)} className="absolute inset-0 z-50">
+                <Suspense fallback={null}> 
+                    <Legacy onBack={() => setViewLegacy(false)} />
+                </Suspense>
+            </div>
+        )}
+
         {/* NEW: On Mobile, show 2D Portfolio instead of 3D space */}
         {viewPortfolio && isMobile && (
             <div onClick={() => setViewPortfolio(false)} className="absolute inset-0 z-50">
@@ -198,8 +210,11 @@ function App() {
       </AnimatePresence>
       
       {!viewPortfolio && (
-          <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center pointer-events-none">
+          <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center pointer-events-none gap-8">
             <button onClick={() => { setShape('cloud'); setViewClients(true); }} className="pointer-events-auto text-gray-500 font-mono text-[10px] uppercase tracking-[0.2em] hover:text-neon transition-all duration-300 animate-pulse hover:animate-none">[ TRUST PROTOCOL ]</button>
+            
+            {/* NEW LEGACY BUTTON */}
+            <button onClick={() => { setShape('cloud'); setViewLegacy(true); }} className="pointer-events-auto text-gray-500 font-mono text-[10px] uppercase tracking-[0.2em] hover:text-neon transition-all duration-300 animate-pulse hover:animate-none">[ OUR LEGACY ]</button>
           </div>
       )}
     </div>
