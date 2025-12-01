@@ -124,9 +124,18 @@ export default function Legacy({ onBack }) {
             <h3 className="text-white/50 font-mono text-xs mb-4 uppercase tracking-widest border-b border-neon/30 pb-2 inline-block">
               A History of Leadership
             </h3>
-            <p>
+            <p className="mb-4">
               Our standards were developed in an academic environment of excellence. As the former leadership behind the CNA-Q Photography Club, we established a training curriculum that produced national award winners.
             </p>
+
+            {/* NEW ADDITION: SCHOLARSHIP STORY */}
+            <div className="bg-white/5 p-5 rounded border border-white/10 mb-4">
+              <h4 className="text-neon font-mono text-xs uppercase mb-2">:: Art for Impact</h4>
+              <p className="text-sm text-gray-300">
+                We believe talent should serve the community. During our time at CNA-Q, we organized photography exhibits to sell printed works, directing the proceeds to fund scholarships for high-GPA students facing financial hardship. It was an early lesson in converting creative assets into tangible support for deserving talent.
+              </p>
+            </div>
+
             <p className="mt-4 font-bold text-white">
               That same culture of mentorship, discipline, and award-winning rigor is the DNA of KEYFRAME. We don't just deliver work; we engineer success.
             </p>

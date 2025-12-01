@@ -3,40 +3,18 @@ import { motion } from 'framer-motion';
 // REAL PORTFOLIO DATA
 const PROJECTS = [
   { 
-    title: "NEON RUNNER", 
-    type: "VIDEO", 
-    desc: "High-octane commercial spot featuring dynamic motion tracking and neon aesthetics.",
+    title: "VISUAL ENGINEERING", 
+    type: "WORKFLOW", 
+    image: "/portfolio-final-cut.webp",
+    desc: "Orchestrating complex narrative architecture. A zero-latency workflow managing 50+ layers of 4K RAW footage, HDR color science, and immersive Dolby Atmos soundscapes.",
     color: "#CCFF00" 
   },
   { 
-    title: "APEX ARCH", 
-    type: "WEB", 
-    desc: "Minimalist architectural portfolio website with WebGL interactions.",
+    title: "SAFARIN STEEL", 
+    type: "CORPORATE IDENTITY", 
+    image: "/portfolio-catalog.webp",
+    desc: "Industrial sector re-branding. A complete visual overhaul translating heavy manufacturing capabilities into a sleek, modern digital profile for international stakeholders.",
     color: "#00E0FF" 
-  },
-  { 
-    title: "CYBER BREW", 
-    type: "BRAND", 
-    desc: "Complete brand identity for a cyberpunk-themed coffee chain.",
-    color: "#FF0055" 
-  },
-  { 
-    title: "VELOCITY 2.0", 
-    type: "MOTION", 
-    desc: "Explainer video using 2.5D animation techniques for a tech startup.",
-    color: "#CCFF00" 
-  },
-  { 
-    title: "ECHO FASHION", 
-    type: "CAMPAIGN", 
-    desc: "Social media campaign driving 300% engagement increase.",
-    color: "#00E0FF" 
-  },
-  { 
-    title: "ORBITAL TECH", 
-    type: "UI/UX", 
-    desc: "Dashboard design for a satellite tracking SaaS platform.",
-    color: "#FF0055" 
   }
 ];
 
@@ -82,10 +60,19 @@ export default function Portfolio({ onBack }) {
               {PROJECTS.map((project, i) => (
                 <div 
                   key={i} 
-                  className="bg-white/5 backdrop-blur-md border border-white/5 rounded-xl overflow-hidden hover:border-neon/30 transition-colors group cursor-pointer flex flex-col h-64"
+                  className="bg-black/40 backdrop-blur-md border border-white/5 rounded-xl overflow-hidden hover:border-neon/30 transition-all group cursor-pointer flex flex-col h-64 relative"
                 >
-                  {/* Image Placeholder (Dark gradient for now, can replace with <img>) */}
-                  <div className="flex-grow bg-gradient-to-t from-black via-white/5 to-transparent relative p-6 flex flex-col justify-end">
+                  {/* ACTUAL IMAGE */}
+                  <img 
+                    src={project.image} 
+                    alt={project.title}
+                    className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-40 transition-opacity duration-500"
+                  />
+
+                  {/* Gradient Overlay for Text Readability */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent z-10"></div>
+
+                  <div className="flex-grow relative z-20 p-6 flex flex-col justify-end">
                      
                      {/* Floating Tag */}
                      <div className="absolute top-4 right-4">
@@ -98,7 +85,7 @@ export default function Portfolio({ onBack }) {
                      <span className="text-xs font-mono font-bold tracking-widest mb-2" style={{ color: project.color }}>
                         /// {project.type}
                      </span>
-                     <p className="text-gray-400 text-xs leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                     <p className="text-gray-400 text-xs leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-300 translate-y-2 group-hover:translate-y-0">
                        {project.desc}
                      </p>
                   </div>

@@ -5,40 +5,22 @@ import { useEffect, useRef, useState } from 'react'
 
 const PROJECTS = [
   { 
-    title: "NEON RUNNER", 
-    type: "VIDEO", 
-    desc: "High-octane commercial spot featuring dynamic motion tracking and neon aesthetics.",
+    title: "VIDEO PRODUCTION", 
+    type: "POST-PRODUCTION", 
+    image: "/portfolio-final-cut.webp",
+    desc: "High-end narrative architecture. A zero-latency workflow managing complex 4K/8K timelines, HDR color science, and immersive audio mastering.",
+    longDesc: "This service pushes the boundaries of visual storytelling. We utilize industry-standard Final Cut Pro workflows combined with advanced motion graphics and sound design to create seamless, high-energy visual experiences that retain audience attention.",
+    deliverables: ["4K Master Render", "Social Media Cuts", "Sound Design & Mixing", "Color Grading"],
     color: "#CCFF00" 
   },
   { 
-    title: "APEX ARCH", 
-    type: "WEB", 
-    desc: "Minimalist architectural portfolio website with WebGL interactions.",
+    title: "CORPORATE BRANDING", 
+    type: "VISUAL SYSTEMS", 
+    image: "/portfolio-catalog.webp",
+    desc: "Strategic corporate design. Translating complex business capabilities into sleek, modern digital and print profiles for international stakeholders.",
+    longDesc: "This service elevates your market presence through cohesive design. We utilize precision typography and grid systems to create authoritative company profiles, catalogs, and brand assets that establish immediate trust with your clients.",
+    deliverables: ["Brand Guidelines", "Company Profile (PDF)", "Print-Ready Assets", "Digital Stationery"],
     color: "#00E0FF" 
-  },
-  { 
-    title: "CYBER BREW", 
-    type: "BRAND", 
-    desc: "Complete brand identity for a cyberpunk-themed coffee chain.",
-    color: "#FF0055" 
-  },
-  { 
-    title: "VELOCITY 2.0", 
-    type: "MOTION", 
-    desc: "Explainer video using 2.5D animation techniques for a tech startup.",
-    color: "#CCFF00" 
-  },
-  { 
-    title: "ECHO FASHION", 
-    type: "CAMPAIGN", 
-    desc: "Social media campaign driving 300% engagement increase.",
-    color: "#00E0FF" 
-  },
-  { 
-    title: "ORBITAL TECH", 
-    type: "UI/UX", 
-    desc: "Dashboard design for a satellite tracking SaaS platform.",
-    color: "#FF0055" 
   }
 ];
 
@@ -62,7 +44,6 @@ export default function PortfolioSpace({ isOpen, onClose }) {
   // Handle Click Outside
   useEffect(() => {
     function handleClickOutside(event) {
-      // On mobile, ignore click outside (user must use X button)
       if (isMobile) return 
 
       if (isOpen && wrapperRef.current && !wrapperRef.current.contains(event.target)) {
@@ -87,7 +68,6 @@ export default function PortfolioSpace({ isOpen, onClose }) {
       
       <Html 
         transform 
-        // FIX 1: Huge Mobile Size (1.5 distanceFactor = very close/big)
         distanceFactor={isMobile ? 1.5 : 3}
         zIndexRange={[100, 0]} 
         style={{ 
@@ -95,7 +75,6 @@ export default function PortfolioSpace({ isOpen, onClose }) {
           height: isMobile ? '80vh' : '650px',
           opacity: isOpen ? 1 : 0.08, 
           filter: isOpen ? 'blur(0px)' : 'blur(4px)',
-          // FIX 2: 'auto' when open BLOCKS clicks to background buttons (disabling them)
           pointerEvents: isOpen ? 'auto' : 'none', 
           display: 'flex',
           justifyContent: 'center',
@@ -104,18 +83,17 @@ export default function PortfolioSpace({ isOpen, onClose }) {
         }}
       >
         
-        {/* LIQUID GLASS UI */}
+        {/* UI CONTAINER */}
         <div 
             ref={wrapperRef}
-            // FIX 3: Stop propagation everywhere to ensure scrolling works and camera doesn't spin
             onPointerDown={(e) => e.stopPropagation()}
             onPointerMove={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
-            className="w-full h-full bg-[#0d0d0d]/80 backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col ring-1 ring-white/5 relative"
+            className="w-full h-full bg-[#0d0d0d]/90 backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col ring-1 ring-white/5 relative"
         >
             
-            {/* CLOSE BUTTON (Internal) */}
+            {/* CLOSE BUTTON */}
             <button 
                 onClick={(e) => { e.stopPropagation(); onClose(); }}
                 className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors font-mono text-xl z-[60] p-4 bg-black/20 rounded-full backdrop-blur-md cursor-pointer"
@@ -125,6 +103,7 @@ export default function PortfolioSpace({ isOpen, onClose }) {
 
             <AnimatePresence mode="wait">
                 {!selectedProject ? (
+                    // --- GRID VIEW ---
                     <motion.div 
                         key="grid"
                         initial={{ opacity: 0 }}
@@ -140,7 +119,7 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                                 PORTFOLIO
                                 </h2>
                                 <p className="text-neon font-mono text-[10px] md:text-xs tracking-[0.3em]">
-                                /// SELECTED WORKS
+                                /// SELECTED SERVICES
                                 </p>
                             </div>
                         </div>
@@ -148,23 +127,22 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                         {/* SCROLLABLE GRID */}
                         <div 
                             className="overflow-y-auto pr-2 custom-scrollbar flex-grow"
-                            // FIX 4: pan-y enables vertical scrolling
                             style={{ 
                                 touchAction: 'pan-y', 
                                 WebkitOverflowScrolling: 'touch' 
                             }}
                         >
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 pb-4">
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 pb-4">
                                 {PROJECTS.map((project, i) => (
                                     <div 
                                         key={i} 
                                         onClick={(e) => { e.stopPropagation(); setSelectedProject({ ...project, index: i }); }}
-                                        className="relative rounded-xl overflow-hidden border border-white/10 hover:border-neon/50 transition-all duration-300 group cursor-pointer h-48 md:h-64 shadow-lg bg-black"
+                                        className="relative rounded-xl overflow-hidden border border-white/10 hover:border-neon/50 transition-all duration-300 group cursor-pointer aspect-video shadow-lg bg-black"
                                     >
                                         <img 
-                                            src={`https://picsum.photos/id/${i + 80}/600/400`} 
+                                            src={project.image} 
                                             alt={project.title}
-                                            className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-105"
+                                            className="absolute inset-0 w-full h-full object-cover z-0 transition-transform duration-700 group-hover:scale-105 opacity-60 group-hover:opacity-40"
                                             loading="eager"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent z-10"></div>
@@ -180,77 +158,89 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                         </div>
                     </motion.div>
                 ) : (
-                    /* --- DETAIL VIEW --- */
+                    // --- DETAIL VIEW (PARALLAX SCROLL) ---
                     <motion.div 
                         key="detail"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="flex flex-col h-full w-full bg-[#0d0d0d] absolute inset-0 z-40"
+                        className="absolute inset-0 z-40 bg-[#0d0d0d] flex flex-col"
                     >
-                        {/* Big Image Area */}
-                        <div className="w-full h-[40%] md:h-[55%] relative flex-shrink-0">
-                            <img 
-                                src={`https://picsum.photos/id/${selectedProject.index + 80}/600/400`} 
-                                alt={selectedProject.title}
-                                className="w-full h-full object-cover opacity-80"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent"></div>
-                            
-                            {/* BACK BUTTON */}
-                            <button 
-                                onClick={(e) => { e.stopPropagation(); setSelectedProject(null); }}
-                                className="absolute top-6 left-6 bg-black/40 hover:bg-neon hover:text-black text-white border border-white/20 px-4 py-2 rounded-full backdrop-blur-md transition-all font-mono text-xs tracking-widest flex items-center gap-2 z-50 cursor-pointer"
-                            >
-                                ← BACK
-                            </button>
-                        </div>
-
-                        {/* Content Area */}
+                        {/* Scroll Container */}
                         <div 
-                            className="flex-grow p-6 md:p-12 -mt-6 relative z-10 overflow-y-auto"
-                            style={{ 
-                                touchAction: 'pan-y', 
-                                WebkitOverflowScrolling: 'touch' 
-                            }}
+                            className="w-full h-full overflow-y-auto relative custom-scrollbar"
+                            style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}
                         >
-                            <div className="flex flex-col md:flex-row justify-between items-start gap-4 border-b border-white/10 pb-6 mb-6">
-                                <div>
-                                    <h1 className="text-3xl md:text-6xl font-black text-white tracking-tighter mb-2">
-                                        {selectedProject.title}
-                                    </h1>
-                                    <span className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded text-xs font-mono tracking-widest" style={{ color: selectedProject.color }}>
-                                        /// {selectedProject.type} PROJECT
-                                    </span>
-                                </div>
-                                <div className="text-right hidden md:block">
-                                     <span className="text-white/30 font-mono text-sm block">DATE</span>
-                                     <span className="text-white font-mono text-sm">OCT 2024</span>
+                            
+                            {/* 1. STICKY IMAGE HEADER */}
+                            {/* Sticky ensures it stays at the top while text scrolls over it */}
+                            <div className="sticky top-0 left-0 w-full z-0 aspect-video max-h-[60vh] bg-black">
+                                <img 
+                                    src={selectedProject.image}
+                                    alt={selectedProject.title}
+                                    // 'object-cover' ensures full bleed, 'aspect-video' ensures correct shape
+                                    className="w-full h-full object-cover opacity-80"
+                                />
+                                
+                                {/* The "Black Fade" Overlay (Visible at bottom of image) */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent z-10"></div>
+
+                                {/* BACK BUTTON (Fixed position relative to image) */}
+                                <button 
+                                    onClick={(e) => { e.stopPropagation(); setSelectedProject(null); }}
+                                    className="absolute top-6 left-6 bg-black/40 hover:bg-neon hover:text-black text-white border border-white/20 px-4 py-2 rounded-full backdrop-blur-md transition-all font-mono text-xs tracking-widest flex items-center gap-2 z-50 cursor-pointer"
+                                >
+                                    ← BACK
+                                </button>
+                            </div>
+
+                            {/* 2. TEXT CONTENT (Scrolls UP over the image) */}
+                            {/* Negative margin pulls it up to overlap the image initially */}
+                            <div className="relative z-20 -mt-24 md:-mt-32 px-4 md:px-0 pb-12">
+                                
+                                {/* Text Container Background */}
+                                <div className="bg-[#0d0d0d]/35 backdrop-blur-xl border-t border-white/10 rounded-t-3xl p-6 md:p-12 shadow-[0_-20px_40px_rgba(0,0,0,0.8)]">
+                                    
+                                    {/* Content Header */}
+                                    <div className="flex flex-col md:flex-row justify-between items-start gap-4 border-b border-white/10 pb-6 mb-6">
+                                        <div>
+                                            <h1 className="text-3xl md:text-6xl font-black text-white tracking-tighter mb-2">
+                                                {selectedProject.title}
+                                            </h1>
+                                            <span className="inline-block px-3 py-1 bg-white/5 border border-white/10 rounded text-xs font-mono tracking-widest" style={{ color: selectedProject.color }}>
+                                                /// {selectedProject.type}
+                                            </span>
+                                        </div>
+                                        <div className="text-right hidden md:block">
+                                            <span className="text-white/30 font-mono text-sm block">AVAILABLE</span>
+                                            <span className="text-white font-mono text-sm">2025</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Text Grid */}
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                        <div className="md:col-span-2">
+                                            <h3 className="text-white/50 text-xs font-mono tracking-widest mb-4">SERVICE DESCRIPTION</h3>
+                                            <p className="text-gray-300 text-sm md:text-lg leading-relaxed font-light">
+                                                {selectedProject.desc} 
+                                                <br/><br/>
+                                                {selectedProject.longDesc}
+                                            </p>
+                                        </div>
+                                        
+                                        <div className="bg-white/5 rounded-xl p-6 border border-white/5 h-fit">
+                                            <h3 className="text-white/50 text-xs font-mono tracking-widest mb-4">DELIVERABLES</h3>
+                                            <ul className="text-gray-400 text-sm space-y-2 font-mono">
+                                                {selectedProject.deliverables.map((item, index) => (
+                                                    <li key={index}>• {item}</li>
+                                                ))}
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pb-10">
-                                <div className="md:col-span-2">
-                                    <h3 className="text-white/50 text-xs font-mono tracking-widest mb-4">DESCRIPTION</h3>
-                                    <p className="text-gray-300 text-sm md:text-lg leading-relaxed font-light">
-                                        {selectedProject.desc} 
-                                        <br/><br/>
-                                        This project pushed the boundaries of {selectedProject.type.toLowerCase()} production. 
-                                        We utilized advanced rendering techniques combined with real-time motion capture to create a seamless visual experience.
-                                    </p>
-                                </div>
-                                
-                                <div className="bg-white/5 rounded-xl p-6 border border-white/5 h-fit">
-                                    <h3 className="text-white/50 text-xs font-mono tracking-widest mb-4">DELIVERABLES</h3>
-                                    <ul className="text-gray-400 text-sm space-y-2 font-mono">
-                                        <li>• 4K Master Render</li>
-                                        <li>• Social Media Cuts</li>
-                                        <li>• Source Files</li>
-                                        <li>• Brand Guidelines</li>
-                                    </ul>
-                                </div>
-                            </div>
                         </div>
                     </motion.div>
                 )}
