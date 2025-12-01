@@ -197,7 +197,7 @@ export default function PortfolioSpace({ isOpen, onClose }) {
 
                             {/* 2. TEXT CONTENT (Scrolls UP over the image) */}
                             {/* Negative margin pulls it up to overlap the image initially */}
-                            <div className="relative z-20 -mt-24 md:-mt-32 px-4 md:px-0 pb-12">
+                            <div className="relative z-20 -mt-24 md:-mt-4 px-4 md:px-0 pb-12">
                                 
                                 {/* Text Container Background */}
                                 <div className="bg-[#0d0d0d]/35 backdrop-blur-xl border-t border-white/10 rounded-t-3xl p-6 md:p-12 shadow-[0_-20px_40px_rgba(0,0,0,0.8)]">
