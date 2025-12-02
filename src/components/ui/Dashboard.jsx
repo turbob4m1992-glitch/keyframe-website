@@ -21,10 +21,10 @@ const DATA = {
         col: "col-span-1 md:col-span-2" 
       },
       { 
-        title: "FREELANCER", 
-        label: "CONNECT PROFESSIONALLY", 
-        linkDisplay: "freelancer.com/u/YousefBa", 
-        url: "https://www.freelancer.com/u/YousefBa/Keyframe-Global", 
+        title: "DIRECT LINE", 
+        label: "PRIORITY ACCESS", 
+        linkDisplay: "+962 791 6565 55", // Type your actual number here
+        url: "tel:+962791656555", // Use international format (no spaces)
         col: "col-span-1" 
       }
     ]
