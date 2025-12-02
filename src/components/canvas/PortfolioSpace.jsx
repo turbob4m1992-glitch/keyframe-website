@@ -29,7 +29,7 @@ const PROJECTS = [
     desc: "Data-driven creative architecture. Leveraging real-time analytics and user behavior heatmaps to engineer high-conversion visual systems.",
     longDesc: "We don't just make things look good; we make them perform. By integrating proprietary behavioral modeling protocols, we track user engagement down to the millisecond, allowing us to iterate creative assets in real-time for maximum market penetration.",
     deliverables: ["Growth Strategy Roadmap", "User Behavior Analytics", "Conversion Optimization", "ROI Performance Reports"],
-    color: "#FFB800" // NEW: Neon Amber
+    color: "#FFB800" 
   },
   { 
     title: "DIGITAL ARCHITECTURE", 
@@ -38,7 +38,7 @@ const PROJECTS = [
     desc: "The interface you are navigating is the ultimate demonstration. A bespoke digital ecosystem engineered for zero-latency interaction.",
     longDesc: "Static screenshots cannot capture the weight of a true digital experience. We reject templates to engineer living, breathing web environments from the ground up. This platform is a testament to what happens when visual design meets uncompromising code architecture.",
     deliverables: ["Bespoke Web Architecture", "Spatial UI Design", "Performance Engineering", "SEO Optimization"],
-    color: "#D400FF" // NEW: Electric Purple
+    color: "#D400FF" 
   }
 ];
 
@@ -128,19 +128,9 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                         className="flex flex-col h-full overflow-y-auto pr-2 custom-scrollbar p-4 md:p-12"
                     >
                         
-                        {/* 1. LIQUID GLASS CONTAINER (Header + 3 Main Cards) */}
-                        <div 
-                            // GLASS PHYSICS SIMULATION
-                            style={{ 
-                                // 1. Attempt blur (might fail in 3D, but good to have)
-                                backdropFilter: 'blur(20px)', 
-                                WebkitBackdropFilter: 'blur(20px)',
-                                // 2. THE SECRET: Inner white glow simulates thickness + Outer dark shadow for depth
-                                boxShadow: '0 20px 40px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.1), inset 0 0 20px rgba(255,255,255,0.05)'
-                            }}
-                            // bg-black/40 is the sweet spot for visibility vs transparency
-                            className="bg-black/80 rounded-3xl p-6 md:p-8 mb-6"
-                        >
+                        {/* 1. DARK THEME CONTAINER (Header + 3 Main Cards) */}
+                        {/* UPDATED: bg-[#0d0d0d]/85 as requested */}
+                        <div className="bg-[#0d0d0d]/85 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 mb-6 shadow-2xl">
                             
                             {/* HEADER */}
                             <div className="flex justify-between items-start mb-6 border-b border-white/10 pb-4 flex-shrink-0">
@@ -187,10 +177,10 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                         >
                             {/* CENTER TEXT - PUSHED UP */}
                             <div className="absolute inset-0 flex items-center justify-center z-0 pb-32">
-                        <h3 className="text-2xl md:text-5xl font-black text-white/10 group-hover:text-white/20 transition-colors tracking-tighter italic select-none text-center px-4">
-                        "PROOF OF PERFORMANCE"
-                        </h3>
-                    </div>
+                                <h3 className="text-2xl md:text-5xl font-black text-white/10 group-hover:text-white/20 transition-colors tracking-tighter italic select-none text-center px-4">
+                                "PROOF OF PERFORMANCE"
+                                </h3>
+                            </div>
 
                             {/* BOTTOM OVERLAY */}
                             <div className="relative z-10 mt-auto">
