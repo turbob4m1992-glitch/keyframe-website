@@ -9,7 +9,7 @@ const PROJECTS = [
     desc: "High-end narrative architecture. A zero-latency workflow managing complex 4K/8K timelines, HDR color science, and immersive audio mastering.",
     longDesc: "This service pushes the boundaries of visual storytelling. We utilize industry-standard Final Cut Pro workflows combined with advanced motion graphics and sound design to create seamless, high-energy visual experiences that retain audience attention.",
     deliverables: ["4K Master Render", "Social Media Cuts", "Sound Design & Mixing", "Color Grading"],
-    color: "#CCFF00" 
+    color: "#FF0055" 
   },
   { 
     title: "CORPORATE BRANDING", 
@@ -19,6 +19,24 @@ const PROJECTS = [
     longDesc: "This service elevates your market presence through cohesive design. We utilize precision typography and grid systems to create authoritative company profiles, catalogs, and brand assets that establish immediate trust with your clients.",
     deliverables: ["Brand Guidelines", "Company Profile (PDF)", "Print-Ready Assets", "Digital Stationery"],
     color: "#00E0FF" 
+  },
+  { 
+    title: "STRATEGY & GROWTH", 
+    type: "DATA INTELLIGENCE", 
+    image: "/portfolio-strategy.webp",
+    desc: "Data-driven creative architecture. Leveraging real-time analytics and user behavior heatmaps to engineer high-conversion visual systems.",
+    longDesc: "We don't just make things look good; we make them perform. By integrating proprietary behavioral modeling protocols, we track user engagement down to the millisecond, allowing us to iterate creative assets in real-time for maximum market penetration.",
+    deliverables: ["Growth Strategy Roadmap", "User Behavior Analytics", "Conversion Optimization", "ROI Performance Reports"],
+    color: "#FFB800" // Neon Amber
+  },
+  { 
+    title: "DIGITAL ARCHITECTURE", 
+    type: "SYSTEM DESIGN", 
+    image: null, 
+    desc: "The interface you are navigating is the ultimate demonstration. A bespoke digital ecosystem engineered for zero-latency interaction.",
+    longDesc: "Static screenshots cannot capture the weight of a true digital experience. We reject templates to engineer living, breathing web environments from the ground up. This platform is a testament to what happens when visual design meets uncompromising code architecture.",
+    deliverables: ["Bespoke Web Architecture", "Spatial UI Design", "Performance Engineering", "SEO Optimization"],
+    color: "#D400FF" // Electric Purple
   }
 ];
 
@@ -71,19 +89,36 @@ export default function MobilePortfolio({ onBack }) {
                                 onClick={() => setSelectedProject({ ...project, index: i })}
                                 className="relative h-48 rounded-xl overflow-hidden border border-white/10 shadow-lg group shrink-0"
                             >
-                                <img 
-                                    src={project.image} 
-                                    alt={project.title}
-                                    className="absolute inset-0 w-full h-full object-cover z-0 opacity-80"
-                                    loading="lazy"
-                                />
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-10"></div>
-                                <div className="absolute inset-0 p-5 flex flex-col justify-end z-20">
-                                    <h3 className="text-xl font-black text-white tracking-tighter mb-1">{project.title}</h3>
-                                    <span className="text-[10px] font-mono font-bold tracking-widest text-neon" style={{ color: project.color }}>
-                                        /// {project.type}
-                                    </span>
-                                </div>
+                                {project.image ? (
+                                    <>
+                                        <img 
+                                            src={project.image} 
+                                            alt={project.title}
+                                            className="absolute inset-0 w-full h-full object-cover z-0 opacity-80"
+                                            loading="lazy"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/40 to-transparent z-10"></div>
+                                        <div className="absolute inset-0 p-5 flex flex-col justify-end z-20">
+                                            <h3 className="text-xl font-black text-white tracking-tighter mb-1">{project.title}</h3>
+                                            <span className="text-[10px] font-mono font-bold tracking-widest text-neon" style={{ color: project.color }}>
+                                                /// {project.type}
+                                            </span>
+                                        </div>
+                                    </>
+                                ) : (
+                                    // MOBILE CARD 4: Look Around You + Overlay
+                                    <div className="absolute inset-0 flex flex-col justify-between p-5 bg-transparent border border-white/20">
+                                        <div className="flex-grow flex items-center justify-center">
+                                            <h3 className="text-2xl font-black text-white/20 tracking-tighter italic">"PROOF OF PERFORMANCE"</h3>
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-black text-white tracking-tighter mb-1">{project.title}</h3>
+                                            <span className="text-[10px] font-mono font-bold tracking-widest text-white" style={{ color: project.color }}>
+                                                /// {project.type}
+                                            </span>
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>
@@ -97,13 +132,25 @@ export default function MobilePortfolio({ onBack }) {
                     exit={{ opacity: 0, y: 20 }}
                     className="flex flex-col h-full w-full bg-[#0d0d0d] absolute inset-0 z-40"
                 >
-                    <div className="w-full h-[45%] relative flex-shrink-0 bg-black">
-                        <img 
-                            src={selectedProject.image}
-                            alt={selectedProject.title}
-                            className="w-full h-full object-cover opacity-90"
-                        />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent"></div>
+                    {/* TOP IMAGE AREA */}
+                    {/* If Card 4: bg-transparent. If others: bg-black */}
+                    <div className={`w-full h-[45%] relative flex-shrink-0 ${selectedProject.image ? 'bg-black' : 'bg-transparent'}`}>
+                        {selectedProject.image ? (
+                            <>
+                                <img 
+                                    src={selectedProject.image}
+                                    alt={selectedProject.title}
+                                    className="w-full h-full object-cover opacity-90"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent"></div>
+                            </>
+                        ) : (
+                             // MOBILE DETAIL FALLBACK: Transparent + Logo only
+                             <div className="w-full h-full flex items-center justify-center relative">
+                                <img src="/logo.svg" className="w-42 opacity-80 mx-auto" alt="Keyframe" />
+                            </div>
+                        )}
+                        
                         <button 
                             onClick={() => setSelectedProject(null)}
                             className="absolute top-4 left-4 bg-black/40 hover:bg-neon hover:text-black text-white border border-white/20 px-4 py-2 rounded-full backdrop-blur-md transition-all font-mono text-xs tracking-widest flex items-center gap-2 z-50"

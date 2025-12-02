@@ -11,7 +11,7 @@ const PROJECTS = [
     desc: "High-end narrative architecture. A zero-latency workflow managing complex 4K/8K timelines, HDR color science, and immersive audio mastering.",
     longDesc: "This service pushes the boundaries of visual storytelling. We utilize industry-standard Final Cut Pro workflows combined with advanced motion graphics and sound design to create seamless, high-energy visual experiences that retain audience attention.",
     deliverables: ["4K Master Render", "Social Media Cuts", "Sound Design & Mixing", "Color Grading"],
-    color: "#CCFF00" 
+    color: "#FF0055" 
   },
   { 
     title: "CORPORATE BRANDING", 
@@ -21,6 +21,24 @@ const PROJECTS = [
     longDesc: "This service elevates your market presence through cohesive design. We utilize precision typography and grid systems to create authoritative company profiles, catalogs, and brand assets that establish immediate trust with your clients.",
     deliverables: ["Brand Guidelines", "Company Profile (PDF)", "Print-Ready Assets", "Digital Stationery"],
     color: "#00E0FF" 
+  },
+  { 
+    title: "STRATEGY & GROWTH", 
+    type: "DATA INTELLIGENCE", 
+    image: "/portfolio-strategy.webp",
+    desc: "Data-driven creative architecture. Leveraging real-time analytics and user behavior heatmaps to engineer high-conversion visual systems.",
+    longDesc: "We don't just make things look good; we make them perform. By integrating proprietary behavioral modeling protocols, we track user engagement down to the millisecond, allowing us to iterate creative assets in real-time for maximum market penetration.",
+    deliverables: ["Growth Strategy Roadmap", "User Behavior Analytics", "Conversion Optimization", "ROI Performance Reports"],
+    color: "#FFB800" // NEW: Neon Amber
+  },
+  { 
+    title: "DIGITAL ARCHITECTURE", 
+    type: "SYSTEM DESIGN", 
+    image: null, 
+    desc: "The interface you are navigating is the ultimate demonstration. A bespoke digital ecosystem engineered for zero-latency interaction.",
+    longDesc: "Static screenshots cannot capture the weight of a true digital experience. We reject templates to engineer living, breathing web environments from the ground up. This platform is a testament to what happens when visual design meets uncompromising code architecture.",
+    deliverables: ["Bespoke Web Architecture", "Spatial UI Design", "Performance Engineering", "SEO Optimization"],
+    color: "#D400FF" // NEW: Electric Purple
   }
 ];
 
@@ -31,7 +49,6 @@ export default function PortfolioSpace({ isOpen, onClose }) {
   
   const [selectedProject, setSelectedProject] = useState(null)
 
-  // Reset to main grid when portfolio is closed
   useEffect(() => {
     if (!isOpen) {
       const timer = setTimeout(() => {
@@ -41,7 +58,6 @@ export default function PortfolioSpace({ isOpen, onClose }) {
     }
   }, [isOpen])
 
-  // Handle Click Outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (isMobile) return 
@@ -65,7 +81,6 @@ export default function PortfolioSpace({ isOpen, onClose }) {
       rotation={[0, Math.PI / 2, 0]} 
       scale={1} 
     > 
-      
       <Html 
         transform 
         distanceFactor={isMobile ? 1.5 : 3}
@@ -83,20 +98,20 @@ export default function PortfolioSpace({ isOpen, onClose }) {
         }}
       >
         
-        {/* UI CONTAINER */}
+        {/* MAIN WRAPPER: Transparent */}
         <div 
             ref={wrapperRef}
             onPointerDown={(e) => e.stopPropagation()}
             onPointerMove={(e) => e.stopPropagation()}
             onTouchStart={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
-            className="w-full h-full bg-[#0d0d0d]/90 backdrop-blur-3xl border border-white/10 rounded-3xl overflow-hidden shadow-2xl flex flex-col ring-1 ring-white/5 relative"
+            className="w-full h-full bg-transparent flex flex-col relative"
         >
             
             {/* CLOSE BUTTON */}
             <button 
                 onClick={(e) => { e.stopPropagation(); onClose(); }}
-                className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors font-mono text-xl z-[60] p-4 bg-black/20 rounded-full backdrop-blur-md cursor-pointer"
+                className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors font-mono text-xl z-[60] p-4 bg-black/40 rounded-full backdrop-blur-md cursor-pointer border border-white/10"
             >
                 X
             </button>
@@ -110,34 +125,42 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.2 }}
-                        className="flex flex-col h-full p-4 md:p-12"
+                        className="flex flex-col h-full overflow-y-auto pr-2 custom-scrollbar p-4 md:p-12"
                     >
-                        {/* HEADER */}
-                        <div className="flex justify-between items-start mb-4 border-b border-white/10 pb-4 flex-shrink-0">
-                            <div>
-                                <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-2">
-                                PORTFOLIO
-                                </h2>
-                                <p className="text-neon font-mono text-[10px] md:text-xs tracking-[0.3em]">
-                                /// SELECTED SERVICES
-                                </p>
-                            </div>
-                        </div>
-
-                        {/* SCROLLABLE GRID */}
+                        
+                        {/* 1. LIQUID GLASS CONTAINER (Header + 3 Main Cards) */}
                         <div 
-                            className="overflow-y-auto pr-2 custom-scrollbar flex-grow"
+                            // GLASS PHYSICS SIMULATION
                             style={{ 
-                                touchAction: 'pan-y', 
-                                WebkitOverflowScrolling: 'touch' 
+                                // 1. Attempt blur (might fail in 3D, but good to have)
+                                backdropFilter: 'blur(20px)', 
+                                WebkitBackdropFilter: 'blur(20px)',
+                                // 2. THE SECRET: Inner white glow simulates thickness + Outer dark shadow for depth
+                                boxShadow: '0 20px 40px rgba(0,0,0,0.6), inset 0 0 0 1px rgba(255,255,255,0.1), inset 0 0 20px rgba(255,255,255,0.05)'
                             }}
+                            // bg-black/40 is the sweet spot for visibility vs transparency
+                            className="bg-black/80 rounded-3xl p-6 md:p-8 mb-6"
                         >
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 pb-4">
-                                {PROJECTS.map((project, i) => (
+                            
+                            {/* HEADER */}
+                            <div className="flex justify-between items-start mb-6 border-b border-white/10 pb-4 flex-shrink-0">
+                                <div>
+                                    <h2 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-2">
+                                    PORTFOLIO
+                                    </h2>
+                                    <p className="text-neon font-mono text-[10px] md:text-xs tracking-[0.3em]">
+                                    /// SELECTED SERVICES
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* GRID FOR CARDS 1-3 */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
+                                {PROJECTS.slice(0, 3).map((project, i) => (
                                     <div 
                                         key={i} 
                                         onClick={(e) => { e.stopPropagation(); setSelectedProject({ ...project, index: i }); }}
-                                        className="relative rounded-xl overflow-hidden border border-white/10 hover:border-neon/50 transition-all duration-300 group cursor-pointer aspect-video shadow-lg bg-black"
+                                        className="relative rounded-xl overflow-hidden transition-all duration-300 group cursor-pointer shadow-lg aspect-video border border-white/10 hover:border-neon/50 bg-black"
                                     >
                                         <img 
                                             src={project.image} 
@@ -156,37 +179,71 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                                 ))}
                             </div>
                         </div>
+
+                        {/* 2. TRANSPARENT CONTAINER (Card 4) */}
+                        <div 
+                            onClick={(e) => { e.stopPropagation(); setSelectedProject({ ...PROJECTS[3], index: 3 }); }}
+                            className="w-full border border-white/40 hover:border-white transition-all duration-300 rounded-3xl p-8 md:p-12 cursor-pointer group relative overflow-hidden bg-transparent min-h-[250px] flex flex-col justify-between"
+                        >
+                            {/* CENTER TEXT - PUSHED UP */}
+                            <div className="absolute inset-0 flex items-center justify-center z-0 pb-32">
+                        <h3 className="text-2xl md:text-5xl font-black text-white/10 group-hover:text-white/20 transition-colors tracking-tighter italic select-none text-center px-4">
+                        "PROOF OF PERFORMANCE"
+                        </h3>
+                    </div>
+
+                            {/* BOTTOM OVERLAY */}
+                            <div className="relative z-10 mt-auto">
+                                <h3 className="text-3xl md:text-5xl font-black text-white tracking-tighter mb-2">
+                                    DIGITAL ARCHITECTURE
+                                </h3>
+                                <span 
+                                    className="inline-block px-2 py-1 border rounded text-[10px] md:text-xs font-mono font-bold tracking-widest"
+                                    style={{ color: "#D400FF", borderColor: "rgba(212, 0, 255, 0.3)" }}
+                                >
+                                    /// SYSTEM DESIGN
+                                </span>
+                            </div>
+                        </div>
+
                     </motion.div>
                 ) : (
-                    // --- DETAIL VIEW (PARALLAX SCROLL) ---
+                    // --- DETAIL VIEW ---
                     <motion.div 
                         key="detail"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 0.3 }}
-                        className="absolute inset-0 z-40 bg-[#0d0d0d] flex flex-col"
+                        className="absolute inset-0 z-40 bg-transparent flex flex-col"
                     >
-                        {/* Scroll Container */}
                         <div 
                             className="w-full h-full overflow-y-auto relative custom-scrollbar"
                             style={{ touchAction: 'pan-y', WebkitOverflowScrolling: 'touch' }}
                         >
                             
-                            {/* 1. STICKY IMAGE HEADER */}
-                            {/* Sticky ensures it stays at the top while text scrolls over it */}
-                            <div className="sticky top-0 left-0 w-full z-0 aspect-video max-h-[60vh] bg-black">
-                                <img 
-                                    src={selectedProject.image}
-                                    alt={selectedProject.title}
-                                    // 'object-cover' ensures full bleed, 'aspect-video' ensures correct shape
-                                    className="w-full h-full object-cover opacity-80"
-                                />
-                                
-                                {/* The "Black Fade" Overlay (Visible at bottom of image) */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent z-10"></div>
+                            {/* IMAGE AREA */}
+                            <div className={`sticky top-0 left-0 w-full z-0 aspect-video max-h-[60vh] flex items-center justify-center overflow-hidden ${selectedProject.image ? 'bg-black' : 'bg-transparent'}`}>
+                                {selectedProject.image ? (
+                                    <>
+                                        <img 
+                                            src={selectedProject.image}
+                                            alt={selectedProject.title}
+                                            className="w-full h-full object-cover opacity-80"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-transparent to-transparent z-10"></div>
+                                    </>
+                                ) : (
+                                    // LOGO WATERMARK
+                                    <div className="w-full h-full flex items-center justify-center relative">
+                                        <img 
+                                            src="/logo.svg" 
+                                            alt="Keyframe Logo" 
+                                            className="w-48 md:w-64 opacity-20"
+                                        />
+                                    </div>
+                                )}
 
-                                {/* BACK BUTTON (Fixed position relative to image) */}
                                 <button 
                                     onClick={(e) => { e.stopPropagation(); setSelectedProject(null); }}
                                     className="absolute top-6 left-6 bg-black/40 hover:bg-neon hover:text-black text-white border border-white/20 px-4 py-2 rounded-full backdrop-blur-md transition-all font-mono text-xs tracking-widest flex items-center gap-2 z-50 cursor-pointer"
@@ -195,14 +252,10 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                                 </button>
                             </div>
 
-                            {/* 2. TEXT CONTENT (Scrolls UP over the image) */}
-                            {/* Negative margin pulls it up to overlap the image initially */}
-                            <div className="relative z-20 -mt-24 md:-mt-4 px-4 md:px-0 pb-12">
-                                
-                                {/* Text Container Background */}
-                                <div className="bg-[#0d0d0d]/35 backdrop-blur-xl border-t border-white/10 rounded-t-3xl p-6 md:p-12 shadow-[0_-20px_40px_rgba(0,0,0,0.8)]">
+                            {/* TEXT CONTENT */}
+                            <div className="relative z-20 -mt-24 md:-mt-6 px-4 md:px-0 pb-12">
+                                <div className="bg-[#0d0d0d]/80 backdrop-blur-xl border-t border-white/10 rounded-t-3xl p-6 md:p-12 shadow-[0_-20px_40px_rgba(0,0,0,0.8)]">
                                     
-                                    {/* Content Header */}
                                     <div className="flex flex-col md:flex-row justify-between items-start gap-4 border-b border-white/10 pb-6 mb-6">
                                         <div>
                                             <h1 className="text-3xl md:text-6xl font-black text-white tracking-tighter mb-2">
@@ -218,7 +271,6 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                                         </div>
                                     </div>
 
-                                    {/* Text Grid */}
                                     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                                         <div className="md:col-span-2">
                                             <h3 className="text-white/50 text-xs font-mono tracking-widest mb-4">SERVICE DESCRIPTION</h3>
