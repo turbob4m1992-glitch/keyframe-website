@@ -8,7 +8,8 @@ const PROJECTS = [
     title: "VIDEO PRODUCTION", 
     type: "POST-PRODUCTION", 
     image: "/portfolio-final-cut.webp",
-    desc: "High-end narrative architecture. A zero-latency workflow managing complex 4K/8K timelines, HDR color science, and immersive audio mastering.",
+    // Fixed: Removed comma before "and"
+    desc: "High-end narrative architecture. A zero-latency workflow managing complex 4K/8K timelines, HDR color science and immersive audio mastering.",
     longDesc: "This service pushes the boundaries of visual storytelling. We utilize industry-standard Final Cut Pro workflows combined with advanced motion graphics and sound design to create seamless, high-energy visual experiences that retain audience attention.",
     deliverables: ["4K Master Render", "Social Media Cuts", "Sound Design & Mixing", "Color Grading"],
     color: "#FF0055" 
@@ -18,7 +19,8 @@ const PROJECTS = [
     type: "VISUAL SYSTEMS", 
     image: "/portfolio-catalog.webp",
     desc: "Strategic corporate design. Translating complex business capabilities into sleek, modern digital and print profiles for international stakeholders.",
-    longDesc: "This service elevates your market presence through cohesive design. We utilize precision typography and grid systems to create authoritative company profiles, catalogs, and brand assets that establish immediate trust with your clients.",
+    // Fixed: Removed comma before "and" and changed "that" to "to"
+    longDesc: "This service elevates your market presence through cohesive design. We utilize precision typography and grid systems to create authoritative company profiles, catalogs and brand assets to establish immediate trust with your clients.",
     deliverables: ["Brand Guidelines", "Company Profile (PDF)", "Print-Ready Assets", "Digital Stationery"],
     color: "#00E0FF" 
   },
@@ -129,7 +131,6 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                     >
                         
                         {/* 1. DARK THEME CONTAINER (Header + 3 Main Cards) */}
-                        {/* UPDATED: bg-[#0d0d0d]/85 as requested */}
                         <div className="bg-[#0d0d0d]/85 backdrop-blur-xl border border-white/10 rounded-3xl p-6 md:p-8 mb-6 shadow-2xl">
                             
                             {/* HEADER */}
@@ -159,7 +160,8 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                                             loading="eager"
                                         />
                                         <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent z-10"></div>
-                                        <div className="absolute inset-0 p-4 md:p-6 flex flex-col justify-end z-20">
+                                        {/* FIXED: Reduced padding to p-3 md:p-5 to give text more width (prevents wrapping) */}
+                                        <div className="absolute inset-0 p-3 md:p-5 flex flex-col justify-end z-20">
                                             <h3 className="text-xl md:text-2xl font-black text-white tracking-tighter mb-1 drop-shadow-md">{project.title}</h3>
                                             <span className="text-[10px] md:text-xs font-mono font-bold tracking-widest mb-2" style={{ color: project.color }}>
                                                 /// {project.type}
@@ -275,7 +277,8 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                                             <h3 className="text-white/50 text-xs font-mono tracking-widest mb-4">DELIVERABLES</h3>
                                             <ul className="text-gray-400 text-sm space-y-2 font-mono">
                                                 {selectedProject.deliverables.map((item, index) => (
-                                                    <li key={index}>• {item}</li>
+                                                    // FIXED: Added whitespace-nowrap to prevent text wrapping on small items
+                                                    <li key={index} className="whitespace-nowrap">• {item}</li>
                                                 ))}
                                             </ul>
                                         </div>

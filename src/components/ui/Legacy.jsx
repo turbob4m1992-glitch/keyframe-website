@@ -38,7 +38,7 @@ export default function Legacy({ onBack }) {
           {/* INTRO */}
           <div className="bg-white/5 backdrop-blur-md p-6 rounded-lg border border-white/5">
             <p className="leading-relaxed">
-              For KEYFRAME, loyalty is not just a sentiment—it is a business strategy. After spending over a decade operating at the highest levels of the Gulf market, our leadership made a deliberate choice to return to Jordan.
+              For KEYFRAME, loyalty is not just a sentiment, it is a business strategy. After spending over a decade operating at the highest levels of the Gulf market, our leadership made a deliberate choice to return to Jordan.
             </p>
             <p className="mt-4 leading-relaxed">
               The mission was clear: to transplant <span className="text-white font-bold">"Global Standards"</span> directly into the Jordanian industrial sector. We are not here for a temporary project; we are here to build long-term infrastructure for businesses that demand perfection. We bring the discipline of the corporate world and the precision of the scientific method to a creative industry often driven by guesswork.
@@ -107,7 +107,7 @@ export default function Legacy({ onBack }) {
               The Technical Edge: Data Over Perception
             </h3>
             <p className="mb-4">
-              Trained by National Geographic and Canon experts during his tenure at CNA-Q, our founder developed a disciplined eye for composition—but our agency's unique strength lies in a scientific approach to color.
+              Trained by National Geographic and Canon experts during his tenure at CNA-Q, our founder developed a disciplined eye for composition, but our agency's unique strength lies in a scientific approach to color.
             </p>
             
             <div className="bg-black/40 p-6 rounded-lg border border-white/10">
