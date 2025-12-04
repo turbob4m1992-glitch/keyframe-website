@@ -1,19 +1,54 @@
 import { useState, Suspense, lazy, useRef, useEffect } from 'react' 
-const Portfolio = lazy(() => import('./components/ui/Portfolio')) 
-const Clients = lazy(() => import('./components/ui/Clients'))
-// NEW: Import the Mobile Portfolio View
-const MobilePortfolio = lazy(() => import('./components/ui/MobilePortfolio'))
-// NEW: Import the Legacy Component
-const Legacy = lazy(() => import('./components/ui/Legacy'))
-
 import { Canvas, useThree, useFrame } from '@react-three/fiber' 
+import { AnimatePresence, motion } from 'framer-motion'
+import * as THREE from 'three'
+import { Helmet } from 'react-helmet-async'
+
+// --- COMPONENTS ---
 import ParticleBrain from './components/canvas/ParticleBrain'
 import PortfolioSpace from './components/canvas/PortfolioSpace' 
 import Logo from './components/ui/Logo'
-import { AnimatePresence, motion } from 'framer-motion'
-import * as THREE from 'three'
 
+// --- LAZY LOADS ---
+const Portfolio = lazy(() => import('./components/ui/Portfolio')) 
+const Clients = lazy(() => import('./components/ui/Clients'))
+const MobilePortfolio = lazy(() => import('./components/ui/MobilePortfolio'))
+const Legacy = lazy(() => import('./components/ui/Legacy'))
 const Dashboard = lazy(() => import('./components/ui/Dashboard'))
+
+// --- MASTER SEO SCHEMA ---
+const schemaData = {
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Keyframe Global",
+  "image": "https://www.keyframeglobal.com/keyframe-og-image.png",
+  "description": "High-end visual engineering agency specializing in cinematic video production, corporate branding, and bespoke web architecture.",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Amman",
+    "addressCountry": "JO"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "31.9539", 
+    "longitude": "35.9106" 
+  },
+  "url": "https://www.keyframeglobal.com",
+  "telephone": "+962791656555",
+  "priceRange": "$$$",
+  "openingHoursSpecification": [
+    {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"],
+      "opens": "09:00",
+      "closes": "18:00"
+    }
+  ],
+  "sameAs": [
+    "https://www.linkedin.com/company/keyframeglobal",
+    "https://www.instagram.com/keyframeglobal"
+  ]
+};
 
 function CameraRig({ entered, shape, viewPortfolio }) {
   const { camera, size } = useThree() 
@@ -59,14 +94,12 @@ function CameraRig({ entered, shape, viewPortfolio }) {
   return null
 }
 
-function App() {
+export default function App() {
   const [shape, setShape] = useState('cloud') 
   const [entered, setEntered] = useState(false)
   const [viewClients, setViewClients] = useState(false) 
-  const [viewLegacy, setViewLegacy] = useState(false) // NEW STATE FOR LEGACY
+  const [viewLegacy, setViewLegacy] = useState(false)
   const [viewPortfolio, setViewPortfolio] = useState(false)
-  
-  // NEW: Detect Mobile Screen Size
   const [isMobile, setIsMobile] = useState(false)
 
   useEffect(() => {
@@ -86,6 +119,16 @@ function App() {
       onClick={handleBackgroundClick} 
     >
       
+      {/* --- SEO ENGINE (MERGED HERE) --- */}
+      <Helmet>
+        <title>KEYFRAME GLOBAL | Visual Engineering & Production</title>
+        <meta name="description" content="A high-end visual engineering agency specializing in cinematic video production, corporate branding, and bespoke web architecture. Based in Jordan, operating globally." />
+        <meta name="keywords" content="Video Production Amman, Web Design Jordan, Branding Agency Middle East, React Developers, VFX Studio" />
+        <script type="application/ld+json">
+          {JSON.stringify(schemaData)}
+        </script>
+      </Helmet>
+
       {/* HEADER */}
       <div className="absolute top-0 left-0 right-0 z-20 flex justify-between items-center p-6 md:p-8 pointer-events-none">
         <div className="flex gap-6 pointer-events-auto">
@@ -121,7 +164,6 @@ function App() {
           <Suspense fallback={null}>
             <ParticleBrain shape={shape} />
             
-            {/* CONDITIONAL RENDERING: Only show 3D Hologram on Desktop */}
             {!isMobile && (
                <PortfolioSpace isOpen={viewPortfolio} onClose={() => setViewPortfolio(false)} /> 
             )}
@@ -190,7 +232,6 @@ function App() {
             </div>
         )}
 
-        {/* NEW: LEGACY VIEW */}
         {viewLegacy && (
             <div onClick={() => setViewLegacy(false)} className="absolute inset-0 z-50">
                 <Suspense fallback={null}> 
@@ -199,7 +240,6 @@ function App() {
             </div>
         )}
 
-        {/* NEW: On Mobile, show 2D Portfolio instead of 3D space */}
         {viewPortfolio && isMobile && (
             <div onClick={() => setViewPortfolio(false)} className="absolute inset-0 z-50">
                 <Suspense fallback={null}>
@@ -212,13 +252,9 @@ function App() {
       {!viewPortfolio && (
           <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center pointer-events-none gap-8">
             <button onClick={() => { setShape('cloud'); setViewClients(true); }} className="pointer-events-auto text-gray-500 font-mono text-[10px] uppercase tracking-[0.2em] hover:text-neon transition-all duration-300 animate-pulse hover:animate-none">[ TRUST PROTOCOL ]</button>
-            
-            {/* NEW LEGACY BUTTON */}
             <button onClick={() => { setShape('cloud'); setViewLegacy(true); }} className="pointer-events-auto text-gray-500 font-mono text-[10px] uppercase tracking-[0.2em] hover:text-neon transition-all duration-300 animate-pulse hover:animate-none">[ OUR LEGACY ]</button>
           </div>
       )}
     </div>
   )
 }
-
-export default App
