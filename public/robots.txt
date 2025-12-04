@@ -1,6 +1,4 @@
-# Allow all crawlers (Google, Bing, etc.)
 User-agent: *
 Allow: /
 
-# Point to the Sitemap
 Sitemap: https://www.keyframeglobal.com/sitemap.xml
