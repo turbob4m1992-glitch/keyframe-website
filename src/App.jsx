@@ -33,7 +33,7 @@ const schemaData = {
     "latitude": "31.9539", 
     "longitude": "35.9106" 
   },
-  "url": "https://www.keyframeglobal.com",
+  "url": "https://keyframeglobal.com",
   "telephone": "+962791656555",
   "priceRange": "$$$",
   "openingHoursSpecification": [
