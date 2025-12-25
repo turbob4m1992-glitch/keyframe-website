@@ -124,6 +124,7 @@ export default function App() {
         <title>KEYFRAME GLOBAL | Visual Engineering & Production</title>
         <meta name="description" content="A high-end visual engineering agency specializing in cinematic video production, corporate branding, and bespoke web architecture. Based in Jordan, operating globally." />
         <meta name="keywords" content="Video Production Amman, Web Design Jordan, Branding Agency Middle East, React Developers, VFX Studio" />
+        <link rel="canonical" href="https://keyframeglobal.com" />
         <script type="application/ld+json">
           {JSON.stringify(schemaData)}
         </script>
