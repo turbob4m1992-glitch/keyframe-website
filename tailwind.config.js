@@ -8,11 +8,13 @@ export default {
     extend: {
       colors: {
         'void-black': '#0D0D0D', // The Brand Black
-      'neon': '#CCFF00',       // The Brand Green
-        'glass': 'rgba(255, 255, 255, 0.05)', 
+        'neon': '#CCFF00',       // The Brand Green
+        'glass': 'rgba(255, 255, 255, 0.05)',
+        'electric-cyan': '#00f2ff',
+        'google-blue': '#4285F4',
       },
       fontFamily: {
-        'sans': ['Outfit', 'sans-serif'],
+        'sans': ['Inter', 'sans-serif'],
         'mono': ['Space Mono', 'monospace'],
       },
       backgroundImage: {
