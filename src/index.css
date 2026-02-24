@@ -10,7 +10,29 @@
   color: white;
   overflow: hidden; /* No scrolling. The app is a window. */
 }
+/* CRT SCANLINE EFFECT */
+.crt-screen {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%,
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.06),
+    rgba(0, 255, 0, 0.02),
+    rgba(0, 0, 255, 0.06)
+  );
+  background-size: 100% 2px, 3px 100%;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.7);
+}
 
+/* BLINKING CURSOR */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor-blink {
+  animation: blink 1s step-end infinite;
+}
 /* --- THE LIQUID GLASS CLASS --- */
 /* This creates that high-end Apple/Sci-Fi panel look */
 .liquid-glass {

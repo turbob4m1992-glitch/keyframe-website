@@ -3,6 +3,7 @@ import { Canvas, useThree, useFrame } from '@react-three/fiber'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as THREE from 'three'
 import { Helmet } from 'react-helmet-async'
+import ChatTerminal from './ChatTerminal';
 
 // --- COMPONENTS ---
 import ParticleBrain from './components/canvas/ParticleBrain'
@@ -174,7 +175,7 @@ export default function App() {
           </Suspense>
         </Canvas>
       </div>
-
+      <ChatTerminal />
       <AnimatePresence>
         {!entered && !viewPortfolio && ( 
           <motion.div 

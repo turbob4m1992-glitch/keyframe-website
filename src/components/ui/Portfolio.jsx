@@ -39,7 +39,7 @@ export default function Portfolio({ onBack }) {
               PORTFOLIO
             </h2>
             <p className="text-neon font-mono text-xs tracking-[0.3em]">
-              /// SELECTED WORKS 2023-2025
+              /// SELECTED WORKS 2013-2026
             </p>
           </div>
           

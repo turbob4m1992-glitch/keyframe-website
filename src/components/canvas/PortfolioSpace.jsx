@@ -259,7 +259,7 @@ export default function PortfolioSpace({ isOpen, onClose }) {
                                         </div>
                                         <div className="text-right hidden md:block">
                                             <span className="text-white/30 font-mono text-sm block">AVAILABLE</span>
-                                            <span className="text-white font-mono text-sm">2025</span>
+                                            <span className="text-white font-mono text-sm">2026</span>
                                         </div>
                                     </div>
 
